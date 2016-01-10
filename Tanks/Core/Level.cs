@@ -62,7 +62,7 @@ namespace Tanks
             }
         }
 
-        internal void PutTanks()
+        /*internal void PutTanks()
         {
             Random rand = new Random(DateTime.Now.Millisecond);
             for (int i = 0; i < m_tanks.GetCount(); i++)
@@ -93,7 +93,7 @@ namespace Tanks
 
                 } while (notSet);
             }
-        }
+        }*/
 
         public void SaveLevel(string path)
         {
@@ -153,5 +153,31 @@ namespace Tanks
         protected IPositionable[,] m_field;
         protected int m_m;
         protected int m_n;
+
+        public int M
+        {
+            get
+            {
+                return m_m;
+            }
+
+            set
+            {
+                m_m = value;
+            }
+        }
+
+        public int N
+        {
+            get
+            {
+                return m_n;
+            }
+
+            set
+            {
+                m_n = value;
+            }
+        }
     }
 }

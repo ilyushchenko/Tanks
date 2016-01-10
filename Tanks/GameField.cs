@@ -32,7 +32,7 @@ namespace Tanks
                 m_level = gameSetup.GetLevelSetup();
                 panel1.Width = m_level.N * 40;
                 panel1.Height = m_level.M * 40;
-                m_level.PutTanks();
+                //m_level.PutTanks();
                 gameSetup.Dispose();
                 panel1.Invalidate();
             }
