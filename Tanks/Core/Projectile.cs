@@ -71,17 +71,6 @@ namespace Tanks
             Move(swapPosition);
         }
 
-        /*public void Move(Tank.ExecuteMovableAction swapPosition)
-        {
-            ISerializable unit = swapPosition(Position, m_direction);
-            Point currentPosition = new Point(Position.X, Position.Y);
-            if(unit is Floor)
-            {
-                Position = (unit as IPositionable).Position;
-                (unit as IPositionable).Position = currentPosition;
-            }
-        }*/
-
         public void NextComand(Func<Point, ISerializable> GetUnit, Action<ISerializable> SetUnit)
         {
             //Point currentPosition = GetNextPosition(m_position, m_direction);
