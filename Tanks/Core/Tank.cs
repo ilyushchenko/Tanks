@@ -14,14 +14,12 @@ namespace Tanks
 
         public Tank()
         {
-            InitializeCommands();
             m_direction = Direction.Up;
             m_position = new Point(0, 0);
         }
 
         public Tank(Point position, Direction direction)
         {
-            InitializeCommands();
             m_direction = direction;
             m_position = position;
         }
@@ -96,6 +94,28 @@ namespace Tanks
             m_tankImage.RotateFlip(RotateFlipType.Rotate270FlipNone);
         }
 
+        public void TurnRight()
+        {
+            switch(m_direction)
+            {
+                case Direction.Up:
+                    m_direction = Direction.Right;
+                    break;
+                case Direction.Down:
+                    m_direction = Direction.Left;
+                    break;
+                case Direction.Left:
+                    m_direction = Direction.Up;
+                    break;
+                case Direction.Right:
+                    m_direction = Direction.Down;
+                    break;
+                default:
+                    break;
+            }
+            m_tankImage.RotateFlip(RotateFlipType.Rotate90FlipNone);
+        }
+
         public void Move(Func<Point, ISerializable> GetUnit, Action<ISerializable> SetUnit)
         {
             Point nextPosition = GetNextPosition(m_position, m_direction);
@@ -123,99 +143,42 @@ namespace Tanks
             }*/
         }
 
-        private Point GetNextPosition(Point position, Direction direction)
+        public void Fire(Func<Point, ISerializable> GetUnit, Action<ISerializable> SetUnit)
         {
-            switch(direction)
+            Point nextPosition = GetNextPosition(m_position, m_direction);
+            ISerializable nextUnit = GetUnit(nextPosition);
+            if(nextUnit is Floor)
             {
-                case Direction.Up:
-                    return new Point(position.X, position.Y - 1);
-                case Direction.Down:
-                    return new Point(position.X, position.Y + 1);
-                case Direction.Left:
-                    return new Point(position.X - 1, position.Y);
-                case Direction.Right:
-                    return new Point(position.X + 1, position.Y);
-                default:
-                    return position;
+                nextUnit = new Projectile(nextPosition, m_direction);
+                SetUnit(nextUnit);
             }
         }
 
-        public void TurnRight()
+        public void CheckEnemy(Func<Point, ISerializable> GetUnit)
         {
-            switch(m_direction)
+            Point nextPosition = GetNextPosition(m_position, m_direction);
+            ISerializable nextUnit = GetUnit(nextPosition);
+            if(nextUnit is Tank)
             {
-                case Direction.Up:
-                    m_direction = Direction.Right;
-                    break;
-                case Direction.Down:
-                    m_direction = Direction.Left;
-                    break;
-                case Direction.Left:
-                    m_direction = Direction.Up;
-                    break;
-                case Direction.Right:
-                    m_direction = Direction.Down;
-                    break;
-                default:
-                    break;
+                IsCanMove = true;
             }
-            m_tankImage.RotateFlip(RotateFlipType.Rotate90FlipNone);
-        }
-
-        /*public void Move()
-        {
-            switch(m_direction)
+            else
             {
-                case Direction.Up:
-                    //check(new Point(Position.X, Position.Y + 1));
-                    break;
-                case Direction.Down:
-                    m_position.Offset(0, 40);
-                    break;
-                case Direction.Left:
-                    m_position.Offset(-40, 0);
-                    break;
-                case Direction.Right:
-                    m_position.Offset(40, 0);
-                    break;
-                default:
-                    break;
-            }
-        }*/
-
-        public void CheckCell(ExecuteMovableAction swapPosition)
-        {
-            ISerializable unit = swapPosition(Position, m_direction);
-            Point currentPosition = new Point(Position.X, Position.Y);
-            if(unit is Floor)
-            {
-                Position = (unit as IPositionable).Position;
-                (unit as IPositionable).Position = currentPosition;
+                IsCanMove = false;
             }
         }
 
-        public void CheckEnemy(ExecuteMovableAction swapPosition)
+        public void CheckCell(Func<Point, ISerializable> GetUnit)
         {
-            ISerializable unit;
-            Point positionOfNextUnit = m_position;
-            do
+            Point nextPosition = GetNextPosition(m_position, m_direction);
+            ISerializable nextUnit = GetUnit(nextPosition);
+            if(nextUnit is Floor)
             {
-                unit = swapPosition(positionOfNextUnit, m_direction);
-                positionOfNextUnit = (unit as IPositionable).Position;
-
-            } while(unit is Floor);
-            enemyIsVisivle = (unit is Tank) ? true : false; 
-        }
-
-        public void Fire(ExecuteMovableAction swapPosition)
-        {
-            ISerializable unit = swapPosition(Position, m_direction);
-            if(!(unit is Wall))
+                IsEnemyVisible = true;
+            }
+            else
             {
-                if(unit is Floor)
-                {
-                    unit = new Projectile((unit as IPositionable).Position, m_direction); 
-                }
+                IsEnemyVisible = false;
             }
         }
 
@@ -223,33 +186,10 @@ namespace Tanks
 
         #region Additional methods
 
-        /*public void ExecuteCommand(Commands command)
-        {
-            if (m_commands.ContainsKey(command))
-            {
-                ExecuteAction Action = m_commands[command];
-                Action();
-            }
-        }*/
-
-        public void ExecuteCommand(Commands command, ExecuteMovableAction swapPosition)
-        {
-            if(m_commandsWithOutCheck.ContainsKey(command))
-            {
-                ExecuteAction Action = m_commandsWithOutCheck[command];
-                Action();
-            }
-            if(m_commandsWithCheck.ContainsKey(command))
-            {
-                ExecuteMyAction Action = m_commandsWithCheck[command];
-                Action(swapPosition);
-            }
-        }
-
         public void SetColor(string color)
         {
             m_tankColor = GetColor(color);
-            switch (m_tankColor)
+            switch(m_tankColor)
             {
                 case Colors.Red:
                     m_tankImage = Images.Red;
@@ -264,41 +204,9 @@ namespace Tanks
             }
         }
 
-        private void InitializeCommands()
+        public void SetPlayer(Player plaer)
         {
-            /*m_commandsWithOutCheck.Add(Commands.Left, new ExecuteAction(TurnLeft));
-            m_commandsWithOutCheck.Add(Commands.Right, new ExecuteAction(TurnRight));
-            m_commandsWithCheck.Add(Commands.Move, new ExecuteMyAction(Move));
-            m_commandsWithCheck.Add(Commands.CheckCell, new ExecuteMyAction(CheckCell));
-            m_commandsWithCheck.Add(Commands.CheckEnemy, new ExecuteMyAction(CheckEnemy));
-            m_commandsWithCheck.Add(Commands.Fire, new ExecuteMyAction(Fire));*/
-        }
-
-        private Colors GetColor(string color)
-        {
-            switch (color)
-            {
-                case "красный":
-                case "red": 
-                    return Colors.Red;
-                case "голубой":
-                case "blue":
-                    return Colors.Blue;
-                case "зеленый":
-                    return Colors.Green;
-                case "желтый":
-                    return Colors.Yellow;
-                case "фиолетовый":
-                    return Colors.Unknown;
-                case "малиновый":
-                    return Colors.Unknown;
-                case "черный":
-                    return Colors.Unknown;
-                case "коричневый":
-                    return Colors.Unknown;
-                default:
-                    return Colors.Unknown;
-            }
+            m_player = plaer;
         }
 
         public void NextComand(Func<Point, ISerializable> GetUnit, Action<ISerializable> SetUnit)
@@ -331,42 +239,57 @@ namespace Tanks
             }
         }
 
-        private void Fire(Func<Point, ISerializable> GetUnit, Action<ISerializable> SetUnit)
+        private Point GetNextPosition(Point position, Direction direction)
         {
-            Point nextPosition = GetNextPosition(m_position, m_direction);
-            ISerializable nextUnit = GetUnit(nextPosition);
-            if(nextUnit is Floor)
+            switch(direction)
             {
-                nextUnit = new Projectile(nextPosition, m_direction);
-                SetUnit(nextUnit);
+                case Direction.Up:
+                    return new Point(position.X, position.Y - 1);
+                case Direction.Down:
+                    return new Point(position.X, position.Y + 1);
+                case Direction.Left:
+                    return new Point(position.X - 1, position.Y);
+                case Direction.Right:
+                    return new Point(position.X + 1, position.Y);
+                default:
+                    return position;
             }
         }
 
-        private void CheckEnemy(Func<Point, ISerializable> GetUnit)
+        /*private void InitializeCommands()
         {
-            Point nextPosition = GetNextPosition(m_position, m_direction);
-            ISerializable nextUnit = GetUnit(nextPosition);
-            if(nextUnit is Tank)
-            {
-                IsCanMove = true;
-            }
-            else
-            {
-                IsCanMove = false;
-            }
-        }
+            m_commandsWithOutCheck.Add(Commands.Left, new ExecuteAction(TurnLeft));
+            m_commandsWithOutCheck.Add(Commands.Right, new ExecuteAction(TurnRight));
+            m_commandsWithCheck.Add(Commands.Move, new ExecuteMyAction(Move));
+            m_commandsWithCheck.Add(Commands.CheckCell, new ExecuteMyAction(CheckCell));
+            m_commandsWithCheck.Add(Commands.CheckEnemy, new ExecuteMyAction(CheckEnemy));
+            m_commandsWithCheck.Add(Commands.Fire, new ExecuteMyAction(Fire));
+        }*/
 
-        private void CheckCell(Func<Point, ISerializable> GetUnit)
+        private Colors GetColor(string color)
         {
-            Point nextPosition = GetNextPosition(m_position, m_direction);
-            ISerializable nextUnit = GetUnit(nextPosition);
-            if(nextUnit is Floor)
+            switch(color)
             {
-                IsEnemyVisible = true;
-            }
-            else
-            {
-                IsEnemyVisible = false;
+                case "красный":
+                case "red":
+                    return Colors.Red;
+                case "голубой":
+                case "blue":
+                    return Colors.Blue;
+                case "зеленый":
+                    return Colors.Green;
+                case "желтый":
+                    return Colors.Yellow;
+                case "фиолетовый":
+                    return Colors.Unknown;
+                case "малиновый":
+                    return Colors.Unknown;
+                case "черный":
+                    return Colors.Unknown;
+                case "коричневый":
+                    return Colors.Unknown;
+                default:
+                    return Colors.Unknown;
             }
         }
 
@@ -374,12 +297,13 @@ namespace Tanks
 
         #region Delegates
 
-        public delegate void ExecuteAction();
-        public delegate void ExecuteMyAction(ExecuteMovableAction action);
+        //public delegate void ExecuteAction();
+
+        //public delegate void ExecuteMyAction(ExecuteMovableAction action);
 
         //public delegate void ExecuteMovableAction(Point swapPosition, Point currentPosition);
 
-        public delegate ISerializable ExecuteMovableAction(Point swapPosition, Direction direction);
+        //public delegate ISerializable ExecuteMovableAction(Point swapPosition, Direction direction);
 
         #endregion
 
@@ -390,14 +314,17 @@ namespace Tanks
         private Bitmap m_tankImage = Images.Tank;
 
         private Point m_position;
-        
+
+        private Player m_player;
+
         private Colors m_tankColor;
 
-        private Dictionary<Commands, ExecuteAction> m_commandsWithOutCheck = new Dictionary<Commands, ExecuteAction>();
-        private Dictionary<Commands, ExecuteMyAction> m_commandsWithCheck = new Dictionary<Commands, ExecuteMyAction>();
+        //private Dictionary<Commands, ExecuteAction> m_commandsWithOutCheck = new Dictionary<Commands, ExecuteAction>();
+        //private Dictionary<Commands, ExecuteMyAction> m_commandsWithCheck = new Dictionary<Commands, ExecuteMyAction>();
 
+        public bool IsCanMove { get; set; }
 
-        private bool enemyIsVisivle = true;
+        public bool IsEnemyVisible { get; set; }
 
         #endregion
 
@@ -420,28 +347,5 @@ namespace Tanks
 
 
         #endregion
-
-        public bool IsCanMove { get; set; }
-        public bool IsEnemyVisible { get; set; }
-
-        public void SetPlayer(Player plaer)
-        {
-            m_player = plaer;
-        }
-
-        private Player m_player;
-
-        /*public bool Equal(IPositionable unit)
-        {
-            if (unit is Tank && unit != null)
-            {
-                if (unit.Position == m_position)
-                {
-                    return true;
-                }
-            }
-            return false;
-            //return (tank.Position == m_position) ? true : false;
-        }*/
     }
 }
