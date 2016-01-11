@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Tanks
 {
-    public class Projectile : IPositionable, ISerializable, IDrawable, IMoveble
+    public class Projectile : IPositionable, ISerializable, IDrawable, IExecutable
     {
         public Projectile()
         {
@@ -79,6 +79,58 @@ namespace Tanks
             {
                 Position = (unit as IPositionable).Position;
                 (unit as IPositionable).Position = currentPosition;
+            }
+        }
+
+        public void NextComand(Func<Point, ISerializable> GetUnit, Action<ISerializable> SetUnit)
+        {
+            //Point currentPosition = GetNextPosition(m_position, m_direction);
+
+            Point nextPosition = GetNextPosition(m_position, m_direction);
+            Point currentPosition = new Point(m_position.X, m_position.Y);
+            ISerializable swapUnit = GetUnit(nextPosition);
+            ISerializable currentUnit = GetUnit(currentPosition);
+            if(swapUnit is Floor)
+            {
+                Point tempUnit = currentPosition;
+                ((IPositionable)currentUnit).Position = ((IPositionable)swapUnit).Position;
+                ((IPositionable)swapUnit).Position = tempUnit;
+                SetUnit(swapUnit);
+                SetUnit(currentUnit);
+            }
+            else if(swapUnit is Tank)
+            {
+                // TODO Сделать можель разрушенного танка
+                Wall tank = new Wall();
+                tank.Position = ((IPositionable)swapUnit).Position;
+                swapUnit = tank;
+                currentUnit = new Floor(m_position.X, m_position.Y);
+                SetUnit(currentUnit);
+                SetUnit(swapUnit);
+
+
+            }
+            else
+            {
+                currentUnit = new Floor(m_position.X, m_position.Y);
+                SetUnit(currentUnit);
+            }
+        }
+
+        private Point GetNextPosition(Point position, Tank.Direction direction)
+        {
+            switch(direction)
+            {
+                case Tank.Direction.Up:
+                    return new Point(position.X, position.Y - 1);
+                case Tank.Direction.Down:
+                    return new Point(position.X, position.Y + 1);
+                case Tank.Direction.Left:
+                    return new Point(position.X - 1, position.Y);
+                case Tank.Direction.Right:
+                    return new Point(position.X + 1, position.Y);
+                default:
+                    return position;
             }
         }
 

@@ -54,11 +54,12 @@ namespace Tanks
             {
                 Tank tank = new Tank();
                 Player player = new Player();
-                player.Tank = tank;
-                tank.SetColor(cbxList[i].SelectedItem.ToString());
                 player.LoadCommands(tbxList[i].Text);
-                m_level.AddPlayer(player);
+                tank.SetColor(cbxList[i].SelectedItem.ToString());
+                tank.SetPlayer(player);
+                m_level.PutTank(tank);
             }
+
         }
 
         public GameController GetLevelSetup()

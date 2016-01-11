@@ -8,7 +8,7 @@ using System.IO;
 
 namespace Tanks
 {
-    public class Tank : IPositionable, ISerializable, IDrawable, IMoveble
+    public class Tank : IPositionable, ISerializable, IDrawable, IExecutable
     {
         #region Constructors
 
@@ -96,15 +96,24 @@ namespace Tanks
             m_tankImage.RotateFlip(RotateFlipType.Rotate270FlipNone);
         }
 
-        public void Move(ExecuteMovableAction swapPosition)
+        public void Move(Func<Point, ISerializable> GetUnit, Action<ISerializable> SetUnit)
         {
-            if(enemyIsVisivle)
+            Point nextPosition = GetNextPosition(m_position, m_direction);
+            Point currentPosition = new Point(m_position.X, m_position.Y);
+            ISerializable swapUnit = GetUnit(nextPosition);
+            ISerializable currentUnit = GetUnit(currentPosition);
+            if(swapUnit is Floor)
             {
-                Fire(swapPosition);
-                enemyIsVisivle = false;
-
+                Point tempUnit = currentPosition;
+                ((IPositionable)currentUnit).Position = ((IPositionable)swapUnit).Position;
+                ((IPositionable)swapUnit).Position = tempUnit;
+                SetUnit(swapUnit);
+                SetUnit(currentUnit);
             }
-            
+
+
+
+
             /*ISerializable unit = swapPosition(Position, m_direction);
             Point currentPosition = new Point(Position.X, Position.Y);
             if(unit is Floor)
@@ -112,6 +121,23 @@ namespace Tanks
                 Position = (unit as IPositionable).Position;
                 (unit as IPositionable).Position = currentPosition;
             }*/
+        }
+
+        private Point GetNextPosition(Point position, Direction direction)
+        {
+            switch(direction)
+            {
+                case Direction.Up:
+                    return new Point(position.X, position.Y - 1);
+                case Direction.Down:
+                    return new Point(position.X, position.Y + 1);
+                case Direction.Left:
+                    return new Point(position.X - 1, position.Y);
+                case Direction.Right:
+                    return new Point(position.X + 1, position.Y);
+                default:
+                    return position;
+            }
         }
 
         public void TurnRight()
@@ -240,12 +266,12 @@ namespace Tanks
 
         private void InitializeCommands()
         {
-            m_commandsWithOutCheck.Add(Commands.Left, new ExecuteAction(TurnLeft));
+            /*m_commandsWithOutCheck.Add(Commands.Left, new ExecuteAction(TurnLeft));
             m_commandsWithOutCheck.Add(Commands.Right, new ExecuteAction(TurnRight));
             m_commandsWithCheck.Add(Commands.Move, new ExecuteMyAction(Move));
             m_commandsWithCheck.Add(Commands.CheckCell, new ExecuteMyAction(CheckCell));
             m_commandsWithCheck.Add(Commands.CheckEnemy, new ExecuteMyAction(CheckEnemy));
-            m_commandsWithCheck.Add(Commands.Fire, new ExecuteMyAction(Fire));
+            m_commandsWithCheck.Add(Commands.Fire, new ExecuteMyAction(Fire));*/
         }
 
         private Colors GetColor(string color)
@@ -275,6 +301,75 @@ namespace Tanks
             }
         }
 
+        public void NextComand(Func<Point, ISerializable> GetUnit, Action<ISerializable> SetUnit)
+        {
+            Commands command = m_player.NextComand();
+            switch(command)
+            {
+                case Commands.Left:
+                    TurnLeft();
+                    break;
+                case Commands.Right:
+                    TurnRight();
+                    break;
+                case Commands.Move:
+                    Move(GetUnit, SetUnit);
+                    break;
+                case Commands.CheckCell:
+                    CheckCell(GetUnit);
+                    break;
+                case Commands.CheckEnemy:
+                    CheckEnemy(GetUnit);
+                    break;
+                case Commands.Fire:
+                    Fire(GetUnit, SetUnit);
+                    break;
+                case Commands.Unknown:
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void Fire(Func<Point, ISerializable> GetUnit, Action<ISerializable> SetUnit)
+        {
+            Point nextPosition = GetNextPosition(m_position, m_direction);
+            ISerializable nextUnit = GetUnit(nextPosition);
+            if(nextUnit is Floor)
+            {
+                nextUnit = new Projectile(nextPosition, m_direction);
+                SetUnit(nextUnit);
+            }
+        }
+
+        private void CheckEnemy(Func<Point, ISerializable> GetUnit)
+        {
+            Point nextPosition = GetNextPosition(m_position, m_direction);
+            ISerializable nextUnit = GetUnit(nextPosition);
+            if(nextUnit is Tank)
+            {
+                IsCanMove = true;
+            }
+            else
+            {
+                IsCanMove = false;
+            }
+        }
+
+        private void CheckCell(Func<Point, ISerializable> GetUnit)
+        {
+            Point nextPosition = GetNextPosition(m_position, m_direction);
+            ISerializable nextUnit = GetUnit(nextPosition);
+            if(nextUnit is Floor)
+            {
+                IsEnemyVisible = true;
+            }
+            else
+            {
+                IsEnemyVisible = false;
+            }
+        }
+
         #endregion
 
         #region Delegates
@@ -292,7 +387,7 @@ namespace Tanks
 
         private Direction m_direction;
 
-        private Bitmap m_tankImage;
+        private Bitmap m_tankImage = Images.Tank;
 
         private Point m_position;
         
@@ -322,7 +417,19 @@ namespace Tanks
             Unknown
         }
 
+
+
         #endregion
+
+        public bool IsCanMove { get; set; }
+        public bool IsEnemyVisible { get; set; }
+
+        public void SetPlayer(Player plaer)
+        {
+            m_player = plaer;
+        }
+
+        private Player m_player;
 
         /*public bool Equal(IPositionable unit)
         {

@@ -14,45 +14,39 @@ namespace Tanks
 
         }
 
-        public void PutTanks()
+        public void PutTank(Tank tank)
         {
             Random rand = new Random(DateTime.Now.Millisecond);
-            for(int i = 0; i < m_players.Count; i++)
+            bool notSet = false;
+            do
             {
-                bool notSet = false;
-                do
-                {
-                    notSet = true;
+                notSet = true;
 
-                    int x = rand.Next(1, m_n);
-                    int y = rand.Next(1, m_m);
-                    ISerializable unti = m_field.GetUnit(new Point(x, y));
-                    if(unti is Floor)
-                    {
-                        m_players[i].Tank.Position = new Point(x, y);
-                        m_field.SetUnit(m_players[i].Tank);
-                        notSet = false;
-                    }
-                } while(notSet);
-            }
+                int x = rand.Next(1, m_n);
+                int y = rand.Next(1, m_m);
+                ISerializable unti = m_field.GetUnit(new Point(x, y));
+                if(unti is Floor)
+                {
+                    tank.Position = new Point(x, y);
+                    m_field.SetUnit(tank);
+                    notSet = false;
+                }
+            } while(notSet);
+
         }
+
+
 
         public void NextStep()
         {
-            foreach(ISerializable item in m_field)
+            foreach(ISerializable unit in m_field)
             {
-                if(item is IMoveble)
+                if(unit is IExecutable)
                 {
-                    IMoveble dsa = (item as IMoveble);
-                    dsa.Move(Check);
+                    IExecutable executableUnit = unit as IExecutable;
+                    executableUnit.NextComand(m_field.GetUnit, m_field.SetUnit);
                 }
-                
             }
-            /*foreach(Player user in m_players)
-            {
-
-                user.NextComand(Check);
-            }*/
         }
 
         public void SwapPosition(Point swapPosition, Point currentPosition)
@@ -67,11 +61,6 @@ namespace Tanks
                 m_field.SetUnit(swapUnit);
                 m_field.SetUnit(currentUnit);
             }
-        }
-
-        public void AddPlayer(Player player)
-        {
-            m_players.Add(player);
         }
 
         public bool CheckIsFree(Point position, Tank.Direction direction)
@@ -109,7 +98,5 @@ namespace Tanks
                     return position;
             }
         }
-
-        private List<Player> m_players = new List<Player>();
     }
 }

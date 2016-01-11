@@ -27,21 +27,6 @@ namespace Tanks
             }
         }
 
-        public Tank Tank
-        {
-            get
-            {
-                return m_tank;
-            }
-
-            set
-            {
-                m_tank = value;
-            }
-        }
-
-        private Tank m_tank;
-
         private List<Commands> m_commnads = new List<Commands>();
 
         public void LoadCommands(string path)
@@ -69,17 +54,14 @@ namespace Tanks
             }
         }
 
-        public void NextComand(Tank.ExecuteMovableAction swapPosition)
+        public Commands NextComand()
         {
             Commands command = m_commnads[step++];
-
-            m_tank.ExecuteCommand(command, swapPosition);
-
             if(step == m_commnads.Count)
             {
                 step = 0;
             }
-
+            return command;
         }
     }
 }

@@ -33,7 +33,7 @@ namespace Tanks
                 m_level = gameSetup.GetLevelSetup();
                 userControl11.Width = m_level.N * 40;
                 userControl11.Height = m_level.M * 40;
-                m_level.PutTanks();
+                
                 gameSetup.Dispose();
                 userControl11.Invalidate();
             }
