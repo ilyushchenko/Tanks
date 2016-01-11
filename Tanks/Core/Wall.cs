@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Tanks
 {
     public class Wall : IPositionable, ISerializable, IDrawable
     {
+        #region Constructors
+
         public Wall(int x, int y)
         {
             m_position = new Point(x, y);
@@ -20,6 +18,8 @@ namespace Tanks
 
         }
 
+        #endregion
+
         #region IPositionable
 
         public Point Position
@@ -28,25 +28,11 @@ namespace Tanks
             {
                 return m_position;
             }
-
             set
             {
                 m_position = value;
             }
         }
-
-        /*public bool Equal(IPositionable unit)
-        {
-            if (unit is Wall && unit != null)
-            {
-                if (unit.Position == m_position)
-                {
-                    return true;
-                }
-            }
-            return false;
-            //return (tank.Position == m_position) ? true : false;
-        }*/
 
         #endregion
 
@@ -76,20 +62,11 @@ namespace Tanks
 
         #endregion
 
-        //public bool Equal(ISerializable unit)
-        //{
-        //    Wall wall = unit as Wall;
-        //    if (unit != null)
-        //    {
-        //        if (m_position == wall.m_position)
-        //        {
-        //            return true;
-        //        }
-        //    }
-        //    return false;
-        //}
+        #region Variables
 
         private Bitmap m_wallImage = Images.Wall;
         private Point m_position;
+
+        #endregion
     }
 }
