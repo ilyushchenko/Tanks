@@ -6,27 +6,19 @@ namespace Tanks
 {
     internal class Floor : IPositionable, ISerializable, IDrawable
     {
+        #region Constructors
+
         public Floor(int x, int y)
         {
             m_position = new Point(x, y);
         }
+
         public Floor()
         {
 
         }
 
-        /*public bool Equal(IPositionable unit)
-        {
-            if (unit is Floor && unit != null)
-            {
-                if (unit.Position == m_position)
-                {
-                    return true;
-                }
-            }
-            return false;
-            //return (tank.Position == m_position) ? true : false;
-        }*/
+        #endregion
 
         #region IPositionable
 
@@ -36,7 +28,6 @@ namespace Tanks
             {
                 return m_position;
             }
-
             set
             {
                 m_position = value;
@@ -71,8 +62,12 @@ namespace Tanks
 
         #endregion
 
+        #region Variables
+
         private Point m_position;
 
         private Bitmap m_floorImage = Images.Floor;
+
+        #endregion
     }
 }
