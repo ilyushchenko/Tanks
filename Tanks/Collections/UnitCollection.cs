@@ -59,6 +59,29 @@ namespace Tanks
             }
         }
 
+        public ISerializable GetUnit(Point position)
+        {
+            foreach(IPositionable unit in m_units)
+            {
+                if(unit.Position == position)
+                {
+                    return unit as ISerializable;
+                }
+            }
+            return null;
+        }
+
+        public void SetUnit(ISerializable unit)
+        {
+            for(int i = 0; i < m_units.Count; i++)
+            {
+                if((m_units[i] as IPositionable).Position == (unit as IPositionable).Position)
+                {
+                    m_units[i] = unit;
+                }
+            }
+        }
+
         public void Save(string path)
         {
             throw new Exception();

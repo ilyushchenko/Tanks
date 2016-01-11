@@ -28,14 +28,12 @@ namespace Tanks
 
         public Level()
         {
-            m_field = new IPositionable[0, 0];
         }
 
         public Level(int n, int m)
         {
             m_n = n;
             m_m = m;
-            m_field = new IPositionable[m_n, m_m];
         }
 
         public void Draw(Graphics graphics)
@@ -52,7 +50,6 @@ namespace Tanks
             {
                 m_n = Convert.ToInt32(sr.ReadLine());
                 m_m = Convert.ToInt32(sr.ReadLine());
-                m_field = new IPositionable[m_n, m_m];
                 while (!sr.EndOfStream)
                 {
                     string type = sr.ReadLine();
@@ -73,8 +70,7 @@ namespace Tanks
                             break;
                     }
                     unit.Load(sr);
-                    Point position = ((IPositionable)unit).Position;
-                    m_field[position.X, position.Y] = unit as IPositionable;
+                    m_field.Add(unit);
                 }
             }
         }
@@ -92,7 +88,7 @@ namespace Tanks
             }
         }
 
-        protected IPositionable[,] m_field;
+        protected UnitCollection m_field = new UnitCollection();
 
         protected int m_m;
 

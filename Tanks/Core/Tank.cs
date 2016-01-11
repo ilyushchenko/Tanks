@@ -107,12 +107,12 @@ namespace Tanks
             m_tankImage.RotateFlip(RotateFlipType.Rotate90FlipNone);
         }
 
-        public void Move(Player.CheckDelegate check)
+        public void Move()
         {
             switch (m_currentPosition)
             {
                 case Positions.Up:
-                    check(new Point(Position.X, Position.Y + 1));
+                    //check(new Point(Position.X, Position.Y + 1));
                     break;
                 case Positions.Down:
                     m_position.Offset(0, 40);
@@ -156,11 +156,11 @@ namespace Tanks
 
         public void ExecuteCommand(Commands command, Player.CheckDelegate Check)
         {
-            if(m_commands.ContainsKey(command))
+            /*if(m_commands.ContainsKey(command))
             {
                 CommandDelegate Action = m_commands[command];
                 Action(Check);
-            }
+            }*/
         }
 
         public bool Equal(IPositionable unit)

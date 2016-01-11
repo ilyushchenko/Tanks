@@ -34,36 +34,32 @@ namespace Tanks
         {
             int curX = x / Width;
             int curY = y / Height;
-            //int curX = (x - x % Width);
-            //int curY = (y - y % Height);
-            //Wall wall = new Wall(curX, curY);
-            if(!(m_field[curX, curY] is Tank))
+            ISerializable unit = m_field.GetUnit(new Point(curX, curY));
+            if(!(unit is Tank))
             {
-                if(m_field[curX, curY] is Floor)
+                if(unit is Floor)
                 {
-                    m_field[curX, curY] = new Wall(curX, curY);
+                    m_field.SetUnit(new Wall(curX, curY));
                 }
                 else
                 {
-                    m_field[curX, curY] = new Floor(curX, curY);
+                    m_field.SetUnit(new Floor(curX, curY));
                 }
-
             }
-
         }
 
         private void CreateBorder()
         {
             for (int i = 0; i < m_n; i++)
             {
-                m_field[i, 0] = new Wall(i, 0);
-                m_field[i, m_m - 1] = new Wall(i, m_m - 1);
+                m_field.SetUnit(new Wall(i, 0));
+                m_field.SetUnit(new Wall(i, m_m - 1));
             }
 
             for (int i = 1; i < m_m - 1; i++)
             {
-                m_field[0, i] = new Wall(0, i);
-                m_field[m_n - 1, i] = new Wall(m_n - 1, i);
+                m_field.SetUnit(new Wall(0, i));
+                m_field.SetUnit(new Wall(m_n - 1, i));
             }
         }
 
@@ -73,7 +69,7 @@ namespace Tanks
             {
                 for (int j = 0; j < m_m; j++)
                 {
-                    m_field[i, j] = new Floor(i, j);
+                    m_field.Add(new Floor(i, j));
                 }
             }
         }

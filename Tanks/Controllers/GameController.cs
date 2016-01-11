@@ -26,10 +26,11 @@ namespace Tanks
 
                     int x = rand.Next(1, m_n);
                     int y = rand.Next(1, m_m);
-                    if(m_field[x, y] is Floor)
+                    ISerializable unti = m_field.GetUnit(new Point(x, y));
+                    if(unti is Floor)
                     {
                         m_players[i].Tank.Position = new Point(x, y);
-                        m_field[x, y] = m_players[i].Tank;
+                        unti = m_players[i].Tank;
                         notSet = false;
                     }
                     //for(int j = 0; j < m_walls.GetCount(); j++)
@@ -57,15 +58,15 @@ namespace Tanks
         {
             foreach(Player user in m_players)
             {
-                Commands IsFree = user.NextComand();
-                if(IsFree != Commands.Left && IsFree != Commands.Right && IsFree != Commands.Unknown)
-                {
+                Commands command = user.NextComand();
+                /*if(command != Commands.Left && command != Commands.Right && command != Commands.Unknown)
+                {*/
                     user.ExecuteCommand(command);
-                }
+                /*}
                 else
                 {
                     user.ExecuteCommand(command, IsFree);
-                }
+                }*/
             }
         }
 
@@ -76,7 +77,7 @@ namespace Tanks
 
         public bool IsFree(Point position)
         {
-            if(m_field[position.X, position.Y] is Floor)
+            if(m_field.GetUnit(position) is Floor)
             {
                 return true;
             }
