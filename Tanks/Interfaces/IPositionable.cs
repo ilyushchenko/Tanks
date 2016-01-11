@@ -10,6 +10,6 @@ namespace Tanks
     public interface IPositionable
     {
         Point Position { get; set; }
-        bool Equal(IPositionable unit);
+        //bool Equal(IPositionable unit);
     }
 }

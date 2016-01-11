@@ -61,11 +61,19 @@ namespace Tanks
 
         public ISerializable GetUnit(Point position)
         {
-            foreach(IPositionable unit in m_units)
+            /*foreach(IPositionable unit in m_units)
             {
                 if(unit.Position == position)
                 {
                     return unit as ISerializable;
+                }
+            }*/
+            for(int i = 0; i < m_units.Count; i++)
+            {
+                IPositionable unit = m_units[i] as IPositionable;
+                if(unit.Position == position)
+                {
+                    return m_units[i];
                 }
             }
             return null;

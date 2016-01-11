@@ -2,6 +2,6 @@
 {
     public interface IMoveble
     {
-        void Move();
+        void Move(Tank.ExecuteMovableAction swapPosition);
     }
 }

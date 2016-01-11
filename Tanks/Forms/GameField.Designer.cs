@@ -31,8 +31,8 @@
             this.components = new System.ComponentModel.Container();
             this.btnGameSetup = new System.Windows.Forms.Button();
             this.timer = new System.Windows.Forms.Timer(this.components);
-            this.userControl11 = new Tanks.UserControl1();
             this.button1 = new System.Windows.Forms.Button();
+            this.userControl11 = new Tanks.UserControl1();
             this.SuspendLayout();
             // 
             // btnGameSetup
@@ -48,16 +48,8 @@
             // timer
             // 
             this.timer.Enabled = true;
-            this.timer.Interval = 1000;
+            this.timer.Interval = 500;
             this.timer.Tick += new System.EventHandler(this.timer_Tick);
-            // 
-            // userControl11
-            // 
-            this.userControl11.Location = new System.Drawing.Point(12, 57);
-            this.userControl11.Name = "userControl11";
-            this.userControl11.Size = new System.Drawing.Size(390, 305);
-            this.userControl11.TabIndex = 1;
-            this.userControl11.Paint += new System.Windows.Forms.PaintEventHandler(this.userControl11_Paint);
             // 
             // button1
             // 
@@ -68,6 +60,14 @@
             this.button1.Text = "button1";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // userControl11
+            // 
+            this.userControl11.Location = new System.Drawing.Point(12, 57);
+            this.userControl11.Name = "userControl11";
+            this.userControl11.Size = new System.Drawing.Size(390, 305);
+            this.userControl11.TabIndex = 1;
+            this.userControl11.Paint += new System.Windows.Forms.PaintEventHandler(this.userControl11_Paint);
             // 
             // GameField
             // 

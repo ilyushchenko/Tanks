@@ -30,43 +30,42 @@ namespace Tanks
                     if(unti is Floor)
                     {
                         m_players[i].Tank.Position = new Point(x, y);
-                        unti = m_players[i].Tank;
+                        m_field.SetUnit(m_players[i].Tank);
                         notSet = false;
                     }
-                    //for(int j = 0; j < m_walls.GetCount(); j++)
-                    //{
-                    //    if(m_tanks[i].Position == m_walls[j].Position)
-                    //    {
-                    //        notSet = true;
-                    //        break;
-                    //    }
-                    //}
-                    //for(int k = 0; k < m_tanks.GetCount(); k++)
-                    //{
-                    //    if(m_tanks[i].Position == m_tanks[k].Position && i != k)
-                    //    {
-                    //        notSet = true;
-                    //        break;
-                    //    }
-                    //}
-
                 } while(notSet);
             }
         }
 
         public void NextStep()
         {
-            foreach(Player user in m_players)
+            foreach(ISerializable item in m_field)
             {
-                Commands command = user.NextComand();
-                /*if(command != Commands.Left && command != Commands.Right && command != Commands.Unknown)
-                {*/
-                    user.ExecuteCommand(command);
-                /*}
-                else
+                if(item is IMoveble)
                 {
-                    user.ExecuteCommand(command, IsFree);
-                }*/
+                    IMoveble dsa = (item as IMoveble);
+                    dsa.Move(Check);
+                }
+                
+            }
+            /*foreach(Player user in m_players)
+            {
+
+                user.NextComand(Check);
+            }*/
+        }
+
+        public void SwapPosition(Point swapPosition, Point currentPosition)
+        {
+            ISerializable swapUnit = m_field.GetUnit(swapPosition);
+            ISerializable currentUnit = m_field.GetUnit(currentPosition);
+            if(swapUnit is Floor)
+            {
+                Point tempUnit = currentPosition;
+                ((IPositionable)currentUnit).Position = ((IPositionable)swapUnit).Position;
+                ((IPositionable)swapUnit).Position = tempUnit;
+                m_field.SetUnit(swapUnit);
+                m_field.SetUnit(currentUnit);
             }
         }
 
@@ -75,14 +74,40 @@ namespace Tanks
             m_players.Add(player);
         }
 
-        public bool IsFree(Point position)
+        public bool CheckIsFree(Point position, Tank.Direction direction)
         {
-            if(m_field.GetUnit(position) is Floor)
+            Point newPosition = GetNewPosition(position, direction);
+            if(m_field.GetUnit(newPosition) is Floor)
             {
                 return true;
             }
             return false;
-            //return m_field.Exists(p => unit.Equal(p));
+            
+        }
+
+        public ISerializable Check(Point position, Tank.Direction direction)
+        {
+            Point newPosition = GetNewPosition(position, direction);
+            return m_field.GetUnit(newPosition);
+        }
+
+        
+
+        private Point GetNewPosition(Point position, Tank.Direction direction)
+        {
+            switch(direction)
+            {
+                case Tank.Direction.Up:
+                    return new Point(position.X, position.Y - 1);
+                case Tank.Direction.Down:
+                    return new Point(position.X, position.Y + 1);
+                case Tank.Direction.Left:
+                    return new Point(position.X - 1, position.Y);
+                case Tank.Direction.Right:
+                    return new Point(position.X + 1, position.Y);
+                default:
+                    return position;
+            }
         }
 
         private List<Player> m_players = new List<Player>();

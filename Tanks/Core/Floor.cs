@@ -15,7 +15,7 @@ namespace Tanks
 
         }
 
-        public bool Equal(IPositionable unit)
+        /*public bool Equal(IPositionable unit)
         {
             if (unit is Floor && unit != null)
             {
@@ -26,7 +26,7 @@ namespace Tanks
             }
             return false;
             //return (tank.Position == m_position) ? true : false;
-        }
+        }*/
 
         #region IPositionable
 

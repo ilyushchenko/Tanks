@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Core\Commands.cs" />
     <Compile Include="Core\Floor.cs" />
+    <Compile Include="Core\Projectile.cs" />
     <Compile Include="Images.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -125,6 +126,7 @@
     <EmbeddedResource Include="UserControl1.resx">
       <DependentUpon>UserControl1.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="ClassDiagram1.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -152,6 +154,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Floor.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Projectile.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

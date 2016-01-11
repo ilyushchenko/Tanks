@@ -76,8 +76,9 @@ namespace Tanks
 
         private bool OnBorder(IPositionable unit)
         {
-            if (((unit.Position.X >= 0 && unit.Position.X <= m_n) && (unit.Position.Y == 0 || unit.Position.Y == m_m)) ||
-                ((unit.Position.Y >= 1 && unit.Position.Y <= m_m - 1) && (unit.Position.X == 0 || unit.Position.X == m_n)))
+            Point position = unit.Position;
+            if (((position.X >= 0 && position.X <= m_n) && (position.Y == 0 || position.Y == m_m)) ||
+                ((position.Y >= 1 && position.Y <= m_m - 1) && (position.X == 0 || position.X == m_n)))
             {
                 return true;
             }

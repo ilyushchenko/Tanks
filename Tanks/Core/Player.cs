@@ -10,8 +10,8 @@ namespace Tanks
 {
     public class Player
     {
-        public delegate bool CheckDelegate(Point unit);
         private int step = 0;
+
         private string m_nick;
 
         public string Nick
@@ -69,24 +69,17 @@ namespace Tanks
             }
         }
 
-        public Commands NextComand()
+        public void NextComand(Tank.ExecuteMovableAction swapPosition)
         {
             Commands command = m_commnads[step++];
+
+            m_tank.ExecuteCommand(command, swapPosition);
+
             if(step == m_commnads.Count)
             {
                 step = 0;
             }
-            return command;
-        }
 
-        internal void ExecuteCommand(Commands comand)
-        {
-            m_tank.ExecuteCommand(comand);
-        }
-
-        internal void ExecuteCommand(CheckDelegate Check, Commands command)
-        {
-            m_tank.ExecuteCommand(command, Check);
         }
     }
 }

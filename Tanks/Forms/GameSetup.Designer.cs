@@ -103,7 +103,7 @@
             0,
             0});
             this.nudCountOfTanks.Minimum = new decimal(new int[] {
-            2,
+            1,
             0,
             0,
             0});
@@ -111,7 +111,7 @@
             this.nudCountOfTanks.Size = new System.Drawing.Size(120, 20);
             this.nudCountOfTanks.TabIndex = 10;
             this.nudCountOfTanks.Value = new decimal(new int[] {
-            2,
+            1,
             0,
             0,
             0});
