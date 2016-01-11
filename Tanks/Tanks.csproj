@@ -56,7 +56,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Images.resx</DependentUpon>
     </Compile>
-    <Compile Include="Interfaces\IMoveble.cs" />
     <Compile Include="Controllers\EditorController.cs" />
     <Compile Include="Controllers\GameController.cs" />
     <Compile Include="Forms\GameField.cs">
