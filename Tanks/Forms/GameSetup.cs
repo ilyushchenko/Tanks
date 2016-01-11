@@ -13,7 +13,7 @@ namespace Tanks
 {
     public partial class GameSetup : Form
     {
-        Level m_level = new Level();
+        GameController m_level = new GameController();
         List<ComboBox> cbxList = new List<ComboBox>();
         List<TextBox> tbxList = new List<TextBox>();
         //List<Tank> tanks = new List<Tank>();
@@ -46,11 +46,6 @@ namespace Tanks
             }
         }
 
-        private void GameSetup_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void button2_Click(object sender, EventArgs e)
         {
             m_level.LoadLevel(tbxLevelPath.Text);
@@ -63,12 +58,10 @@ namespace Tanks
                 tank.SetColor(cbxList[i].SelectedItem.ToString());
                 player.LoadCommands(tbxList[i].Text);
                 m_level.AddPlayer(player);
-                //m_level.addtank(tank);
             }
-            
         }
 
-        public Level GetLevelSetup()
+        public GameController GetLevelSetup()
         {
             return m_level;
         }

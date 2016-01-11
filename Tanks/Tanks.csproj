@@ -46,41 +46,42 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Commands.cs" />
     <Compile Include="Core\Floor.cs" />
-    <Compile Include="Interfaces\IMoveble.cs" />
-    <Compile Include="Editor\EditorController.cs" />
-    <Compile Include="GameController.cs" />
-    <Compile Include="GameField.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GameField.Designer.cs">
-      <DependentUpon>GameField.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GameSetup.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GameSetup.Designer.cs">
-      <DependentUpon>GameSetup.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Interfaces\IDrawable.cs" />
     <Compile Include="Images.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Images.resx</DependentUpon>
     </Compile>
+    <Compile Include="Interfaces\IMoveble.cs" />
+    <Compile Include="Controllers\EditorController.cs" />
+    <Compile Include="Controllers\GameController.cs" />
+    <Compile Include="Forms\GameField.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\GameField.Designer.cs">
+      <DependentUpon>GameField.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\GameSetup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\GameSetup.Designer.cs">
+      <DependentUpon>GameSetup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Interfaces\IDrawable.cs" />
     <Compile Include="Interfaces\IPositionable.cs" />
     <Compile Include="Interfaces\ISerializable.cs" />
     <Compile Include="Core\Level.cs" />
-    <Compile Include="LevelEditor.cs">
+    <Compile Include="Forms\LevelEditor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LevelEditor.Designer.cs">
+    <Compile Include="Forms\LevelEditor.Designer.cs">
       <DependentUpon>LevelEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="MainMenu.cs">
+    <Compile Include="Forms\MainMenu.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainMenu.Designer.cs">
+    <Compile Include="Forms\MainMenu.Designer.cs">
       <DependentUpon>MainMenu.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -89,27 +90,27 @@
     <Compile Include="Core\Tank.cs" />
     <Compile Include="Collections\UnitCollection.cs" />
     <Compile Include="Core\Wall.cs" />
-    <Compile Include="Player.cs" />
+    <Compile Include="Core\Player.cs" />
     <Compile Include="UserControl1.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UserControl1.Designer.cs">
       <DependentUpon>UserControl1.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="GameField.resx">
+    <EmbeddedResource Include="Forms\GameField.resx">
       <DependentUpon>GameField.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GameSetup.resx">
+    <EmbeddedResource Include="Forms\GameSetup.resx">
       <DependentUpon>GameSetup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Images.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Images.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="LevelEditor.resx">
+    <EmbeddedResource Include="Forms\LevelEditor.resx">
       <DependentUpon>LevelEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainMenu.resx">
+    <EmbeddedResource Include="Forms\MainMenu.resx">
       <DependentUpon>MainMenu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -124,8 +125,6 @@
     <EmbeddedResource Include="UserControl1.resx">
       <DependentUpon>UserControl1.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="ClassDiagram1.cd" />
-    <None Include="ClassDiagram2.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

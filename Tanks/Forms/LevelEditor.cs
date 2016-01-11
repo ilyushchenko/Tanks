@@ -17,6 +17,10 @@ namespace Tanks
         public LevelEditor(EditorController editor)
         {
             InitializeComponent();
+            //this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
+            //this.UpdateStyles();
+            //SetStyle(ControlStyles.Opaque | ControlStyles.AllPaintingInWmPaint, true);
+            //m_editor = editor;
         }
 
         private void btnLoadLevel_Click(object sender, EventArgs e)
@@ -67,7 +71,7 @@ namespace Tanks
         {
             if (m_editor != null)
             {
-                m_editor.Draw(e.Graphics);
+                //m_editor.Draw(e.Graphics);
             }
         }
 

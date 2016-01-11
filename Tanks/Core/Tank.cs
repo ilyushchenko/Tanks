@@ -107,12 +107,12 @@ namespace Tanks
             m_tankImage.RotateFlip(RotateFlipType.Rotate90FlipNone);
         }
 
-        public void Move()
+        public void Move(Player.CheckDelegate check)
         {
-            /*switch (m_currentPosition)
+            switch (m_currentPosition)
             {
                 case Positions.Up:
-                    m_position.Offset(0, -40);
+                    check(new Point(Position.X, Position.Y + 1));
                     break;
                 case Positions.Down:
                     m_position.Offset(0, 40);
@@ -125,7 +125,7 @@ namespace Tanks
                     break;
                 default:
                     break;
-            }*/
+            }
         }
 
         public void CheckCell()
@@ -145,12 +145,21 @@ namespace Tanks
 
         #endregion
 
-        public void ExecuteCommand(string command)
+        public void ExecuteCommand(Commands command)
         {
             if (m_commands.ContainsKey(command))
             {
                 CommandDelegate Action = m_commands[command];
                 Action();
+            }
+        }
+
+        public void ExecuteCommand(Commands command, Player.CheckDelegate Check)
+        {
+            if(m_commands.ContainsKey(command))
+            {
+                CommandDelegate Action = m_commands[command];
+                Action(Check);
             }
         }
 
@@ -187,12 +196,12 @@ namespace Tanks
 
         private void InitializeCommands()
         {
-            m_commands.Add("turn left", new CommandDelegate(TurnLeft));
-            m_commands.Add("turn right", new CommandDelegate(TurnRight));
-            m_commands.Add("move", new CommandDelegate(Move));
-            m_commands.Add("check cell", new CommandDelegate(CheckCell));
-            m_commands.Add("check enemy", new CommandDelegate(CheckEnemy));
-            m_commands.Add("fire", new CommandDelegate(Fire));
+            m_commands.Add(Commands.Left, new CommandDelegate(TurnLeft));
+            m_commands.Add(Commands.Right, new CommandDelegate(TurnRight));
+            m_commands.Add(Commands.Move, new CommandDelegate(Move));
+            m_commands.Add(Commands.CheckCell, new CommandDelegate(CheckCell));
+            m_commands.Add(Commands.CheckEnemy, new CommandDelegate(CheckEnemy));
+            m_commands.Add(Commands.Fire, new CommandDelegate(Fire));
         }
 
         private Colors GetColor(string color)
@@ -200,8 +209,10 @@ namespace Tanks
             switch (color)
             {
                 case "красный":
+                case "red": 
                     return Colors.Red;
                 case "голубой":
+                case "blue":
                     return Colors.Blue;
                 case "зеленый":
                     return Colors.Green;
@@ -230,7 +241,7 @@ namespace Tanks
 
         private delegate void CommandDelegate();
 
-        private Dictionary<string, CommandDelegate> m_commands = new Dictionary<string, CommandDelegate>();
+        private Dictionary<Commands, CommandDelegate> m_commands = new Dictionary<Commands, CommandDelegate>();
 
         private enum Positions
         {

@@ -130,7 +130,6 @@
             this.Controls.Add(this.tbxLevelPath);
             this.Name = "GameSetup";
             this.Text = ".";
-            this.Load += new System.EventHandler(this.GameSetup_Load);
             ((System.ComponentModel.ISupportInitialize)(this.nudCountOfTanks)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

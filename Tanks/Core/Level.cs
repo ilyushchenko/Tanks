@@ -8,14 +8,27 @@ using System.Drawing;
 
 namespace Tanks
 {
-    public class Level
+    public abstract class Level
     {
-        public void Draw(Graphics graphics)
+        public int M
         {
-            foreach (IDrawable unit in m_field)
+            get
             {
-                unit.Draw(graphics);
+                return m_m;
             }
+        }
+
+        public int N
+        {
+            get
+            {
+                return m_n;
+            }
+        }
+
+        public Level()
+        {
+            m_field = new IPositionable[0, 0];
         }
 
         public Level(int n, int m)
@@ -25,9 +38,12 @@ namespace Tanks
             m_field = new IPositionable[m_n, m_m];
         }
 
-        public Level()
+        public void Draw(Graphics graphics)
         {
-            m_field = new IPositionable[0, 0];
+            foreach(IDrawable unit in m_field)
+            {
+                unit.Draw(graphics);
+            }
         }
 
         public void LoadLevel(string path)
@@ -57,83 +73,11 @@ namespace Tanks
                             break;
                     }
                     unit.Load(sr);
-                    IPositionable positionOfUnit = unit as IPositionable;
-                    m_field[positionOfUnit.Position.X, positionOfUnit.Position.Y] = positionOfUnit;
+                    Point position = ((IPositionable)unit).Position;
+                    m_field[position.X, position.Y] = unit as IPositionable;
                 }
             }
         }
-
-        internal void PutTanks()
-        {
-            Random rand = new Random(DateTime.Now.Millisecond);
-            for(int i = 0; i < m_players.Count; i++)
-            {
-                bool notSet = false;
-                do
-                {
-                    notSet = true;
-                    
-                    int x = rand.Next(1, m_n);
-                    int y = rand.Next(1, m_m);
-                    if(m_field[x, y] is Floor)
-                    {
-                        m_players[i].Tank.Position = new Point(x, y);
-                        m_field[x, y] = m_players[i].Tank;
-                        notSet = false;
-                    }
-                    //for(int j = 0; j < m_walls.GetCount(); j++)
-                    //{
-                    //    if(m_tanks[i].Position == m_walls[j].Position)
-                    //    {
-                    //        notSet = true;
-                    //        break;
-                    //    }
-                    //}
-                    //for(int k = 0; k < m_tanks.GetCount(); k++)
-                    //{
-                    //    if(m_tanks[i].Position == m_tanks[k].Position && i != k)
-                    //    {
-                    //        notSet = true;
-                    //        break;
-                    //    }
-                    //}
-
-                } while(notSet);
-            }
-        }
-
-        /*internal void PutTanks()
-        {
-            Random rand = new Random(DateTime.Now.Millisecond);
-            for (int i = 0; i < m_tanks.GetCount(); i++)
-            {
-                bool notSet = false;
-                do
-                {
-                    notSet = false;
-                    int x = rand.Next(1, m_n) * 40;
-                    int y = rand.Next(1, m_m) * 40;
-                    m_tanks[i].Position = new Point(x, y);
-                    for (int j = 0; j < m_walls.GetCount(); j++)
-                    {
-                        if (m_tanks[i].Position == m_walls[j].Position)
-                        {
-                            notSet = true;
-                            break;
-                        }
-                    }
-                    for (int k = 0; k < m_tanks.GetCount(); k++)
-                    {
-                        if (m_tanks[i].Position == m_tanks[k].Position && i != k)
-                        {
-                            notSet = true;
-                            break;
-                        }
-                    }
-
-                } while (notSet);
-            }
-        }*/
 
         public void SaveLevel(string path)
         {
@@ -148,92 +92,10 @@ namespace Tanks
             }
         }
 
-        public bool IsFree(IPositionable unit)
-        {
-            if (m_field[unit.Position.X, unit.Position.Y] != null && m_field[unit.Position.X, unit.Position.Y] is Floor)
-            {
-                return true;
-            }
-            return false;
-            //return m_field.Exists(p => unit.Equal(p));
-        }
-
-        //public void PutTanks()
-        //{
-        //    Random rand = new Random(DateTime.Now.Millisecond);
-        //    for (int i = 0; i < m_tanks.GetCount(); i++)
-        //    {
-        //        bool notSet = false;
-        //        do
-        //        {
-        //            notSet = false;
-        //            int x = rand.Next(1, m_n) * 40;
-        //            int y = rand.Next(1, m_m) * 40;
-        //            m_tanks[i].Position = new Point(x, y);
-        //            for (int j = 0; j < m_walls.GetCount(); j++)
-        //            {
-        //                if (m_tanks[i].Position == m_walls[j].Position)
-        //                {
-        //                    notSet = true;
-        //                    break;
-        //                }
-        //            }
-        //            for (int k = 0; k < m_tanks.GetCount(); k++)
-        //            {
-        //                if (m_tanks[i].Position == m_tanks[k].Position && i != k )
-        //                {
-        //                    notSet = true;
-        //                    break;
-        //                }
-        //            }
-
-        //        } while (notSet);
-        //    }
-        //}
-
-        public void NextStep()
-        {
-            foreach(Player user in m_players)
-            {
-                user.NextComand();
-            }
-        }
-
-        public void AddPlayer(Player player)
-        {
-            m_players.Add(player);
-        }
-
         protected IPositionable[,] m_field;
-        private List<Player> m_players = new List<Player>();
 
         protected int m_m;
+
         protected int m_n;
-
-        public int M
-        {
-            get
-            {
-                return m_m;
-            }
-
-            set
-            {
-                m_m = value;
-            }
-        }
-
-        public int N
-        {
-            get
-            {
-                return m_n;
-            }
-
-            set
-            {
-                m_n = value;
-            }
-        }
     }
 }
