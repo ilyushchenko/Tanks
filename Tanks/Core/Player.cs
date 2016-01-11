@@ -10,10 +10,6 @@ namespace Tanks
 {
     public class Player
     {
-        private int step = 0;
-
-        private string m_nick;
-
         public string Nick
         {
             get
@@ -27,8 +23,6 @@ namespace Tanks
             }
         }
 
-        private List<Commands> m_commnads = new List<Commands>();
-
         public void LoadCommands(string path)
         {
             using(StreamReader sr = new StreamReader(path))
@@ -38,6 +32,16 @@ namespace Tanks
                     m_commnads.Add(GetCommand(sr.ReadLine()));
                 }
             }
+        }
+
+        public Commands NextComand()
+        {
+            Commands command = m_commnads[step++];
+            if(step == m_commnads.Count)
+            {
+                step = 0;
+            }
+            return command;
         }
 
         private Commands GetCommand(string command)
@@ -54,14 +58,10 @@ namespace Tanks
             }
         }
 
-        public Commands NextComand()
-        {
-            Commands command = m_commnads[step++];
-            if(step == m_commnads.Count)
-            {
-                step = 0;
-            }
-            return command;
-        }
+        private int step = 0;
+
+        private string m_nick;
+
+        private List<Commands> m_commnads = new List<Commands>();
     }
 }
