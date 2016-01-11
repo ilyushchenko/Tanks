@@ -30,8 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             this.btnGameSetup = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.timer = new System.Windows.Forms.Timer(this.components);
+            this.userControl11 = new Tanks.UserControl1();
             this.SuspendLayout();
             // 
             // btnGameSetup
@@ -44,27 +44,26 @@
             this.btnGameSetup.UseVisualStyleBackColor = true;
             this.btnGameSetup.Click += new System.EventHandler(this.btnGameSetup_Click);
             // 
-            // panel1
-            // 
-            this.panel1.BackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.panel1.Location = new System.Drawing.Point(12, 58);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(75, 56);
-            this.panel1.TabIndex = 1;
-            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
-            // 
             // timer
             // 
             this.timer.Enabled = true;
             this.timer.Interval = 1000;
             this.timer.Tick += new System.EventHandler(this.timer_Tick);
             // 
+            // userControl11
+            // 
+            this.userControl11.Location = new System.Drawing.Point(12, 57);
+            this.userControl11.Name = "userControl11";
+            this.userControl11.Size = new System.Drawing.Size(390, 305);
+            this.userControl11.TabIndex = 1;
+            this.userControl11.Paint += new System.Windows.Forms.PaintEventHandler(this.userControl11_Paint);
+            // 
             // GameField
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(748, 413);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.userControl11);
             this.Controls.Add(this.btnGameSetup);
             this.DoubleBuffered = true;
             this.Name = "GameField";
@@ -77,7 +76,7 @@
         #endregion
 
         private System.Windows.Forms.Button btnGameSetup;
-        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Timer timer;
+        private UserControl1 userControl11;
     }
 }

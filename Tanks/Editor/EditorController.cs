@@ -41,14 +41,19 @@ namespace Tanks
             //int curX = (x - x % Width);
             //int curY = (y - y % Height);
             //Wall wall = new Wall(curX, curY);
-            if (m_field[curX, curY] is Floor)
+            if(!(m_field[curX, curY] is Tank))
             {
-                m_field[curX, curY] = new Wall(curX, curY);
+                if(m_field[curX, curY] is Floor)
+                {
+                    m_field[curX, curY] = new Wall(curX, curY);
+                }
+                else
+                {
+                    m_field[curX, curY] = new Floor(curX, curY);
+                }
+
             }
-            else
-            {
-                m_field[curX, curY] = new Floor(curX, curY);
-            }
+
         }
 
         private void CreateBorder()

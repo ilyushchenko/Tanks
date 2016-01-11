@@ -109,7 +109,7 @@ namespace Tanks
 
         public void Move()
         {
-            switch (m_currentPosition)
+            /*switch (m_currentPosition)
             {
                 case Positions.Up:
                     m_position.Offset(0, -40);
@@ -125,7 +125,7 @@ namespace Tanks
                     break;
                 default:
                     break;
-            }
+            }*/
         }
 
         public void CheckCell()
@@ -201,7 +201,7 @@ namespace Tanks
             {
                 case "красный":
                     return Colors.Red;
-                case "синий":
+                case "голубой":
                     return Colors.Blue;
                 case "зеленый":
                     return Colors.Green;
@@ -245,6 +245,5 @@ namespace Tanks
             Yellow,
             Unknown
         }
-
     }
 }

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnSelectPath = new System.Windows.Forms.Button();
             this.lblLevelHelpCreate = new System.Windows.Forms.Label();
@@ -48,6 +49,8 @@
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.pnlBattlefield = new System.Windows.Forms.Panel();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.userControl11 = new Tanks.UserControl1();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLevelNSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudLevelMSize)).BeginInit();
@@ -237,17 +240,33 @@
             this.pnlBattlefield.BackColor = System.Drawing.SystemColors.Control;
             this.pnlBattlefield.Location = new System.Drawing.Point(249, 12);
             this.pnlBattlefield.Name = "pnlBattlefield";
-            this.pnlBattlefield.Size = new System.Drawing.Size(585, 277);
+            this.pnlBattlefield.Size = new System.Drawing.Size(582, 277);
             this.pnlBattlefield.TabIndex = 4;
             this.pnlBattlefield.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlBattlefield_Paint);
             this.pnlBattlefield.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pnlBattlefield_MouseDown);
             this.pnlBattlefield.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pnlBattlefield_MouseMove);
+            // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // userControl11
+            // 
+            this.userControl11.Location = new System.Drawing.Point(249, 295);
+            this.userControl11.Name = "userControl11";
+            this.userControl11.Size = new System.Drawing.Size(582, 305);
+            this.userControl11.TabIndex = 5;
+            this.userControl11.Load += new System.EventHandler(this.userControl11_Load);
+            this.userControl11.Paint += new System.Windows.Forms.PaintEventHandler(this.userControl11_Paint);
+            this.userControl11.MouseDown += new System.Windows.Forms.MouseEventHandler(this.userControl11_MouseDown);
             // 
             // LevelEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(866, 631);
+            this.Controls.Add(this.userControl11);
             this.Controls.Add(this.pnlBattlefield);
             this.Controls.Add(this.gbxSave);
             this.Controls.Add(this.panel1);
@@ -287,5 +306,7 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.Panel pnlBattlefield;
+        private System.Windows.Forms.Timer timer1;
+        private UserControl1 userControl11;
     }
 }

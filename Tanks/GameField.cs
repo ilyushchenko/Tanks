@@ -30,11 +30,11 @@ namespace Tanks
             if (DialogResult.OK == gameSetup.ShowDialog())
             {
                 m_level = gameSetup.GetLevelSetup();
-                panel1.Width = m_level.N * 40;
-                panel1.Height = m_level.M * 40;
-                //m_level.PutTanks();
+                userControl11.Width = m_level.N * 40;
+                userControl11.Height = m_level.M * 40;
+                m_level.PutTanks();
                 gameSetup.Dispose();
-                panel1.Invalidate();
+                userControl11.Invalidate();
             }
             else
             {
@@ -42,15 +42,15 @@ namespace Tanks
             }
         }
 
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-            //m_level.DrawLevel(e.Graphics);
-        }
-
         private void timer_Tick(object sender, EventArgs e)
         {
-            //m_level.Next();
-            //panel1.Invalidate();
+            m_level.NextStep();
+            userControl11.Invalidate();
+        }
+
+        private void userControl11_Paint(object sender, PaintEventArgs e)
+        {
+            m_level.Draw(e.Graphics);
         }
     }
 }
