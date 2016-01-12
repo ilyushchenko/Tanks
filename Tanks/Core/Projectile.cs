@@ -73,7 +73,6 @@ namespace Tanks
 
         public void NextComand(Func<Point, ISerializable> GetUnit, Action<ISerializable> SetUnit)
         {
-            //Point currentPosition = GetNextPosition(m_position, m_direction);
 
             Point nextPosition = GetNextPosition(m_position, m_direction);
             Point currentPosition = new Point(m_position.X, m_position.Y);
