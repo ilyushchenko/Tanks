@@ -41,6 +41,19 @@ namespace Tanks
             m_units.Add(unit);
         }
 
+        internal void Remove(Point position)
+        {
+            for(int i = 0; i < m_units.Count; i++)
+            {
+                if((m_units[i] as IPositionable).Position == position)
+                {
+                    int index = m_units.IndexOf(m_units[i]);
+                    m_units.RemoveAt(index);
+
+                }
+            }
+        }
+
         //public void Remove(ISerializable unit)
         //{
         //    m_units.RemoveAll(p => (unit.Equal(p)));
@@ -57,6 +70,18 @@ namespace Tanks
             {
                 unit.Draw(graphics);
             }
+        }
+
+        public bool Exist(Point position)
+        {
+            foreach(ISerializable unit in m_units)
+            {
+                if((unit as IPositionable).Position == position)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public ISerializable GetUnit(Point position)
