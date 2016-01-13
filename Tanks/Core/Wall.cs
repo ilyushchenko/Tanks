@@ -18,6 +18,11 @@ namespace Tanks
 
         }
 
+        public Wall(Point position)
+        {
+            m_position = position;
+        }
+
         #endregion
 
         #region IPositionable
