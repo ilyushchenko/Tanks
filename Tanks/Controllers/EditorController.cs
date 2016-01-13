@@ -26,7 +26,7 @@ namespace Tanks
 
         public EditorController(int n, int m) : base(n, m)
         {
-            FillLevel();
+            //FillLevel();
             CreateBorder();
         }
 
@@ -34,36 +34,40 @@ namespace Tanks
         {
             int curX = x / Width;
             int curY = y / Height;
-            ISerializable unit = m_field.GetUnit(new Point(curX, curY));
-            if(!(unit is Tank))
+            Point position = new Point(curX, curY);
+            //ISerializable unit = m_field.GetUnit(new Point(curX, curY));
+            if(m_field.Exist(position))
             {
-                if(unit is Floor)
+                ISerializable unit = m_field.GetUnit(new Point(curX, curY));
+                if(!(unit is Tank))
                 {
-                    m_field.SetUnit(new Wall(curX, curY));
+                    m_field.Remove(position);
                 }
-                else
-                {
-                    m_field.SetUnit(new Floor(curX, curY));
-                }
+
             }
+            else
+            {
+                m_field.Add(new Wall(position));
+            }
+            
         }
 
         private void CreateBorder()
         {
             for (int i = 0; i < m_n; i++)
             {
-                m_field.SetUnit(new Wall(i, 0));
-                m_field.SetUnit(new Wall(i, m_m - 1));
+                m_field.Add(new Wall(i, 0));
+                m_field.Add(new Wall(i, m_m - 1));
             }
 
             for (int i = 1; i < m_m - 1; i++)
             {
-                m_field.SetUnit(new Wall(0, i));
-                m_field.SetUnit(new Wall(m_n - 1, i));
+                m_field.Add(new Wall(0, i));
+                m_field.Add(new Wall(m_n - 1, i));
             }
         }
 
-        private void FillLevel()
+        /*private void FillLevel()
         {
             for (int i = 0; i < m_n; i++)
             {
@@ -72,8 +76,9 @@ namespace Tanks
                     m_field.Add(new Floor(i, j));
                 }
             }
-        }
+        }*/
 
+            //TODO Доработать OnBorder
         private bool OnBorder(IPositionable unit)
         {
             Point position = unit.Position;

@@ -24,15 +24,14 @@ namespace Tanks
 
                 int x = rand.Next(1, m_n);
                 int y = rand.Next(1, m_m);
-                ISerializable unti = m_field.GetUnit(new Point(x, y));
-                if(unti is Floor)
+                Point position = new Point(x, y);
+                if(!m_field.Exist(position))
                 {
-                    tank.Position = new Point(x, y);
-                    m_field.SetUnit(tank);
+                    tank.Position = position;
+                    m_field.Add(tank);
                     notSet = false;
                 }
             } while(notSet);
-
         }
 
 
@@ -44,7 +43,7 @@ namespace Tanks
                 if(unit is IExecutable)
                 {
                     IExecutable executableUnit = unit as IExecutable;
-                    executableUnit.NextComand(m_field.GetUnit, m_field.SetUnit);
+                    ISerializable resultUnit = executableUnit.NextComand(m_field.GetUnit);
                 }
             }
         }
