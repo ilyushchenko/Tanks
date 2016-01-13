@@ -38,7 +38,7 @@ namespace Tanks
 
         public void Draw(Graphics graphics)
         {
-            foreach(IDrawable unit in m_field)
+            foreach(IDrawable unit in m_field.GetCollection())
             {
                 unit.Draw(graphics);
             }
@@ -81,7 +81,7 @@ namespace Tanks
             {
                 sw.WriteLine(m_n);
                 sw.WriteLine(m_m);
-                foreach (ISerializable unit in m_field)
+                foreach (ISerializable unit in m_field.GetCollection())
                 {
                     unit.Save(sw);
                 }

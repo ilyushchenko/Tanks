@@ -48,7 +48,7 @@
             // timer
             // 
             this.timer.Enabled = true;
-            this.timer.Interval = 500;
+            this.timer.Interval = 300;
             this.timer.Tick += new System.EventHandler(this.timer_Tick);
             // 
             // button1
@@ -63,6 +63,7 @@
             // 
             // userControl11
             // 
+            this.userControl11.BackColor = System.Drawing.Color.Black;
             this.userControl11.Location = new System.Drawing.Point(12, 57);
             this.userControl11.Name = "userControl11";
             this.userControl11.Size = new System.Drawing.Size(390, 305);

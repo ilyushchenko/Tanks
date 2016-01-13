@@ -3,8 +3,22 @@ using System.Drawing;
 
 namespace Tanks
 {
+    //public delegate  ExecuteFunction(GetUnitPosition )
+    public delegate ISerializable GetUnitPosition(Point swapPosition);
+    public enum CommandResult
+    {
+        Moved,
+        MoveFail,
+        Turned,
+        Fire,
+        TankKill,
+        FireFail,
+        OK,
+        ProjectileDestoyed,
+        ProjectileKill
+    }
     public interface IExecutable
     {
-        void NextComand(Func<Point, ISerializable> getUnit, Action<ISerializable> setUnit);
+        CommandResult NextComand(GetUnitPosition getUnitt);
     }
 }

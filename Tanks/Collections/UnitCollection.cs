@@ -49,7 +49,6 @@ namespace Tanks
                 {
                     int index = m_units.IndexOf(m_units[i]);
                     m_units.RemoveAt(index);
-
                 }
             }
         }
@@ -125,7 +124,7 @@ namespace Tanks
             throw new Exception();
         }
 
-        public IEnumerator GetEnumerator()
+        /*public IEnumerator GetEnumerator()
         {
             for (int i = 0; i < m_units.Count; i++)
             {
@@ -139,6 +138,6 @@ namespace Tanks
             {
                 yield return m_units[i];
             }
-        }
+        }*/
     }
 }

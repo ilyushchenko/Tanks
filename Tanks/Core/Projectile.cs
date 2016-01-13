@@ -8,18 +8,31 @@ using System.Threading.Tasks;
 
 namespace Tanks
 {
-    public class Projectile : IPositionable, ISerializable, IDrawable, IExecutable
+    public class Projectile : IPositionable, ISerializable, IDrawable, IExecutable, IDirectinable
     {
         public Projectile()
         {
-            m_direction = Tank.Direction.Up;
+            m_direction = Direction.Up;
             m_position = new Point(0, 0);
         }
 
-        public Projectile(Point position, Tank.Direction direction)
+        public Projectile(Point position, Direction direction)
         {
             m_direction = direction;
             m_position = position;
+        }
+
+        public Direction Direction
+        {
+            get
+            {
+                return m_direction;
+            }
+
+            set
+            {
+                m_direction = value;
+            }
         }
 
         public Point Position
@@ -54,22 +67,22 @@ namespace Tanks
             outFile.WriteLine("{0} {1}", m_position.X, m_position.Y);
         }
 
-        public ISerializable Move(Tank.ExecuteMovableAction getUnit)
+        public CommandResult Move(GetUnitPosition getUnit)
         {
             Point position = GetNextPosition(m_position, m_direction);
             ISerializable unit = getUnit(position);
             if(unit == null)
             {
                 m_position = position;
-                return null;
+                return CommandResult.Moved;
             }
             else if(unit is Tank)
             {
-                return new DestroyedTank();
+                return CommandResult.ProjectileKill;
             }
             else
             {
-                return unit;
+                return CommandResult.ProjectileDestoyed;
             }
 
 
@@ -82,10 +95,56 @@ namespace Tanks
             }*/
         }
 
-
-        public ISerializable NextComand(Tank.ExecuteMovableAction GetUnit)
+        public bool CheckEnemy(GetUnitPosition getUnit)
         {
-            Move(GetUnit);
+            // TODO Сдеалть проверку врага
+
+            Point nextPosition = GetNextPosition(m_position, m_direction);
+            ISerializable nextUnit = getUnit(nextPosition);
+            if(nextUnit is Tank)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool CheckCell(GetUnitPosition getUnit)
+        {
+            Point nextPosition = GetNextPosition(m_position, m_direction);
+            ISerializable nextUnit = getUnit(nextPosition);
+            if(nextUnit == null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+        public CommandResult NextComand(GetUnitPosition GetUnit)
+        {
+            if(CheckCell(GetUnit) && !CheckEnemy(GetUnit))
+            {
+                return Move(GetUnit);
+            }
+            else
+            {
+                if(CheckEnemy(GetUnit))
+                {
+                    return CommandResult.ProjectileKill;
+                    
+                }
+                else
+                {
+                    return CommandResult.ProjectileDestoyed;
+                }
+            }
+            //Move(GetUnit);
             //Point nextPosition = GetNextPosition(m_position, m_direction);
             //Point currentPosition = new Point(m_position.X, m_position.Y);
             //ISerializable swapUnit = GetUnit(nextPosition);
@@ -117,17 +176,17 @@ namespace Tanks
             //}
         }
 
-        private Point GetNextPosition(Point position, Tank.Direction direction)
+        private Point GetNextPosition(Point position, Direction direction)
         {
             switch(direction)
             {
-                case Tank.Direction.Up:
+                case Direction.Up:
                     return new Point(position.X, position.Y - 1);
-                case Tank.Direction.Down:
+                case Direction.Down:
                     return new Point(position.X, position.Y + 1);
-                case Tank.Direction.Left:
+                case Direction.Left:
                     return new Point(position.X - 1, position.Y);
-                case Tank.Direction.Right:
+                case Direction.Right:
                     return new Point(position.X + 1, position.Y);
                 default:
                     return position;
@@ -140,10 +199,10 @@ namespace Tanks
 
         //public delegate void ExecuteMovableAction(Point swapPosition, Point currentPosition);
 
-        public delegate ISerializable ExecuteMovableAction(Point swapPosition, Tank.Direction direction);
+        public delegate ISerializable ExecuteMovableAction(Point swapPosition, Direction direction);
 
 
-        private Tank.Direction m_direction;
+        private Direction m_direction;
 
         private Bitmap m_tankImage = Images.Projectile;
 

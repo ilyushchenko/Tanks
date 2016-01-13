@@ -13,6 +13,25 @@ namespace Tanks
         {
 
         }
+        
+        
+
+        private Point GetNextPosition(Point position, Direction direction)
+        {
+            switch(direction)
+            {
+                case Direction.Up:
+                    return new Point(position.X, position.Y - 1);
+                case Direction.Down:
+                    return new Point(position.X, position.Y + 1);
+                case Direction.Left:
+                    return new Point(position.X - 1, position.Y);
+                case Direction.Right:
+                    return new Point(position.X + 1, position.Y);
+                default:
+                    return position;
+            }
+        }
 
         public void PutTank(Tank tank)
         {
@@ -38,12 +57,69 @@ namespace Tanks
 
         public void NextStep()
         {
-            foreach(ISerializable unit in m_field)
+            for(int i = 0; i < m_field.GetCount(); i++)
             {
-                if(unit is IExecutable)
+
+                if(m_field[i] is IExecutable)
                 {
-                    IExecutable executableUnit = unit as IExecutable;
-                    ISerializable resultUnit = executableUnit.NextComand(m_field.GetUnit);
+                    IExecutable executableUnit = m_field[i] as IExecutable;
+                    CommandResult resultUnit = executableUnit.NextComand(m_field.GetUnit);
+                    Point position, nextPosition;
+                    Direction direction;
+                    switch(resultUnit)
+                    {
+                        case CommandResult.Moved:
+                            break;
+                        case CommandResult.MoveFail:
+                            break;
+                        case CommandResult.Turned:
+                            break;
+                        case CommandResult.Fire:
+                            position = (m_field[i] as IPositionable).Position;
+                            direction = (m_field[i] as IDirectinable).Direction;
+                            nextPosition = GetNextPosition(position, direction);
+                            m_field.Add(new Projectile(nextPosition, direction));
+                            break;
+                        case CommandResult.TankKill:
+                            position = (m_field[i] as IPositionable).Position;
+                            direction = (m_field[i] as IDirectinable).Direction;
+                            nextPosition = GetNextPosition(position, direction);
+                            m_field.Remove(nextPosition);
+                            m_field.Add(new DestroyedTank(nextPosition));
+                            break;
+                        case CommandResult.FireFail:
+                            break;
+                        case CommandResult.OK:
+                            break;
+                        case CommandResult.ProjectileDestoyed:
+                            position = (m_field[i] as IPositionable).Position;
+                            m_field.Remove(position);
+                            break;
+                        case CommandResult.ProjectileKill:
+                            position = (m_field[i] as IPositionable).Position;
+                            direction = (m_field[i] as IDirectinable).Direction;
+                            nextPosition = GetNextPosition(position, direction);
+                            m_field.Remove(position);
+                            m_field.Remove(nextPosition);
+                            m_field.Add(new DestroyedTank(nextPosition));
+                            break;
+                        default:
+                            break;
+                    }
+                    /*if(resultUnit is Tank)
+                    {
+                        m_field.Remove((resultUnit as IPositionable).Position);
+                        m_field.Add(new DestroyedTank((resultUnit as IPositionable).Position));
+                    }
+                    else if(resultUnit is Projectile)
+                    {
+                        m_field.Add(resultUnit);
+                    }
+                    else if(resultUnit is Wall)
+                    {
+                        m_field.Remove((resultUnit as IPositionable).Position);
+                        m_field.Add(new Wall((resultUnit as IPositionable).Position));
+                    }*/
                 }
             }
         }
@@ -62,7 +138,7 @@ namespace Tanks
             }
         }
 
-        public bool CheckIsFree(Point position, Tank.Direction direction)
+        public bool CheckIsFree(Point position, Direction direction)
         {
             Point newPosition = GetNewPosition(position, direction);
             if(m_field.GetUnit(newPosition) is Floor)
@@ -73,7 +149,7 @@ namespace Tanks
             
         }
 
-        public ISerializable Check(Point position, Tank.Direction direction)
+        public ISerializable Check(Point position, Direction direction)
         {
             Point newPosition = GetNewPosition(position, direction);
             return m_field.GetUnit(newPosition);
@@ -81,17 +157,17 @@ namespace Tanks
 
         
 
-        private Point GetNewPosition(Point position, Tank.Direction direction)
+        private Point GetNewPosition(Point position, Direction direction)
         {
             switch(direction)
             {
-                case Tank.Direction.Up:
+                case Direction.Up:
                     return new Point(position.X, position.Y - 1);
-                case Tank.Direction.Down:
+                case Direction.Down:
                     return new Point(position.X, position.Y + 1);
-                case Tank.Direction.Left:
+                case Direction.Left:
                     return new Point(position.X - 1, position.Y);
-                case Tank.Direction.Right:
+                case Direction.Right:
                     return new Point(position.X + 1, position.Y);
                 default:
                     return position;
