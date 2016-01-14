@@ -48,7 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\DestroyedTank.cs" />
-    <Compile Include="Interfaces\IDirectinable.cs" />
+    <Compile Include="Interfaces\IDerictable.cs" />
     <Compile Include="Interfaces\IExecutable.cs" />
     <Compile Include="Core\Commands.cs" />
     <Compile Include="Core\Floor.cs" />
