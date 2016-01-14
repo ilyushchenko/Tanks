@@ -29,7 +29,7 @@ namespace Tanks
 
         private void btnGameStart_Click(object sender, EventArgs e)
         {
-            GameField gameField = new GameField();
+            GameField gameField = new GameField(m_source.GetGameController());
             gameField.Show();
         }
     }

@@ -88,6 +88,11 @@ namespace Tanks
             }
         }
 
+        public UnitCollection GetField()
+        {
+            return m_field;
+        }
+
         protected UnitCollection m_field = new UnitCollection();
 
         protected int m_m;

@@ -14,10 +14,14 @@ namespace Tanks
     {
         //Level m_level = new Level();
 
-        GameController m_level = new GameController();
-        public GameField()
+
+        GameController m_gameController;
+
+
+        public GameField(GameController gameController)
         {
             InitializeComponent();
+            m_gameController = gameController;
         }
 
         private void GameField_Load(object sender, EventArgs e)
@@ -27,12 +31,12 @@ namespace Tanks
 
         private void btnGameSetup_Click(object sender, EventArgs e)
         {
-            GameSetup gameSetup = new GameSetup();
+            GameSetup gameSetup = new GameSetup(m_gameController);
             if (DialogResult.OK == gameSetup.ShowDialog())
             {
-                m_level = gameSetup.GetLevelSetup();
-                userControl11.Width = m_level.N * 40;
-                userControl11.Height = m_level.M * 40;
+                m_gameController = gameSetup.GetLevelSetup();
+                userControl11.Width = m_gameController.N * 40;
+                userControl11.Height = m_gameController.M * 40;
                 
                 gameSetup.Dispose();
                 userControl11.Invalidate();
@@ -45,19 +49,19 @@ namespace Tanks
 
         private void timer_Tick(object sender, EventArgs e)
         {
-            m_level.NextStep();
+            m_gameController.NextStep();
             userControl11.Invalidate();
         }
 
         private void userControl11_Paint(object sender, PaintEventArgs e)
         {
-            m_level.Draw(e.Graphics);
+            m_gameController.Draw(e.Graphics);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             timer.Enabled = false;
-            m_level.SaveLevel("test1.txt");
+            m_gameController.SaveLevel("test1.txt");
         }
     }
 }

@@ -13,6 +13,13 @@ namespace Tanks
             return m_editorController;
         }
 
+        public GameController GetGameController()
+        {
+            return m_gameController;
+        }
+
         private EditorController m_editorController = new EditorController();
+
+        private GameController m_gameController = new GameController();
     }
 }

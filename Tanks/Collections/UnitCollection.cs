@@ -124,20 +124,12 @@ namespace Tanks
             throw new Exception();
         }
 
-        /*public IEnumerator GetEnumerator()
+        public IEnumerator GetEnumerator()
         {
             for (int i = 0; i < m_units.Count; i++)
             {
                 yield return m_units[i];
             }
         }
-
-        public IEnumerable MyItr()
-        {
-            for (int i = 0; i < m_units.Count; i++)
-            {
-                yield return m_units[i];
-            }
-        }*/
     }
 }
