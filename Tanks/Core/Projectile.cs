@@ -2,13 +2,19 @@
 
 namespace Tanks
 {
-    public class Projectile : IPositionable, IDrawable, IExecutable, IDirectinable
+    public class Projectile : IPositionable, IDrawable, IExecutable, IDirectinable, IEqual
     {
+        #region Constructors
+
         public Projectile(Point position, Direction direction)
         {
             m_direction = direction;
             m_position = position;
         }
+
+        #endregion
+
+        #region IDirectinable
 
         public Direction Direction
         {
@@ -23,6 +29,10 @@ namespace Tanks
             }
         }
 
+        #endregion
+
+        #region IPositionable
+
         public Point Position
         {
             get
@@ -36,10 +46,34 @@ namespace Tanks
             }
         }
 
+        #endregion
+
+        #region IDrawable
+
         public void Draw(Graphics graphic)
         {
             graphic.DrawImage(m_tankImage, m_position.X * m_tankImage.Width, m_position.Y * m_tankImage.Height);
         }
+
+        #endregion
+
+        #region IEqual
+
+        public bool Equal(IEqual unit)
+        {
+            if(unit != null && unit is Projectile)
+            {
+                if((unit as IPositionable).Position == Position)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        #endregion
+
+        #region IExecutable
 
         public CommandResult Move()
         {
@@ -66,11 +100,17 @@ namespace Tanks
             return Move();
         }
 
+        #endregion
+
+        #region Variables
+
         private Direction m_direction;
 
         private Bitmap m_tankImage = Images.Projectile;
 
         private Point m_position;
+
+        #endregion
 
     }
 }
