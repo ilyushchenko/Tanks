@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Tanks
 {
-    public class Wall : IPositionable, ISerializable, IDrawable
+    public class Wall : IPositionable, ISerializable, IDrawable, IEqual
     {
         #region Constructors
 
@@ -37,6 +37,22 @@ namespace Tanks
             {
                 m_position = value;
             }
+        }
+
+        #endregion
+
+        #region IEqual
+
+        public bool Equal(IEqual unit)
+        {
+            if(unit != null && unit is Wall)
+            {
+                if((unit as IPositionable).Position == Position)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         #endregion
