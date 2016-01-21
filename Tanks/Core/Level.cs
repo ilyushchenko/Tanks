@@ -1,21 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
 
 namespace Tanks
 {
-    public enum Status
-    {
-        Unplayed,
-        Playing,
-        End,
-    }
     public abstract class Level
     {
+        #region Properties
+
         public int M
         {
             get
@@ -32,17 +24,7 @@ namespace Tanks
             }
         }
 
-        public int Width
-        {
-            get { return Images.Tank.Width; }
-        }
-
-        public int Height
-        {
-            get { return Images.Tank.Height; }
-        }
-
-        public Status Status
+        public Status GameStatus
         {
             get
             {
@@ -55,15 +37,33 @@ namespace Tanks
             }
         }
 
-        public Level()
+        #endregion
+
+        #region Constants
+
+        public int Width
         {
+            get { return Images.Tank.Width; }
         }
+
+        public int Height
+        {
+            get { return Images.Tank.Height; }
+        }
+
+        #endregion
+
+        #region Constructors
 
         public Level(int n, int m)
         {
             m_n = n;
             m_m = m;
         }
+
+        #endregion
+
+        #region Drawing
 
         public void Draw(Graphics graphics)
         {
@@ -73,31 +73,17 @@ namespace Tanks
             }
         }
 
+        #endregion
+
+        #region Save/Load
+
         public void LoadLevel(string path)
         {
             using(StreamReader sr = new StreamReader(path))
             {
                 m_n = Convert.ToInt32(sr.ReadLine());
                 m_m = Convert.ToInt32(sr.ReadLine());
-                while (!sr.EndOfStream)
-                {
-                    string type = sr.ReadLine();
-                    ISerializable unit;
-                    switch (type)
-                    {
-                        case "wall":
-                            unit = new Wall();
-                            break;
-                        case "tank":
-                            unit = new Tank();
-                            break;
-                        default:
-                            unit = new Wall();
-                            break;
-                    }
-                    unit.Load(sr);
-                    m_field.Add(unit as IPositionable);
-                }
+                m_field.Load(sr);
             }
         }
 
@@ -107,17 +93,22 @@ namespace Tanks
             {
                 sw.WriteLine(m_n);
                 sw.WriteLine(m_m);
-                foreach (ISerializable unit in m_field.GetCollection())
-                {
-                    unit.Save(sw);
-                }
+                m_field.Save(sw);
             }
         }
+
+        #endregion
+
+        #region Access
 
         public UnitCollection GetField()
         {
             return m_field;
         }
+
+        #endregion
+
+        #region Varoables
 
         protected UnitCollection m_field = new UnitCollection();
 
@@ -127,6 +118,17 @@ namespace Tanks
 
         protected Status m_status = Status.Unplayed;
 
+        #endregion
 
+        #region Enum
+
+        public enum Status
+        {
+            Unplayed,
+            Playing,
+            End,
+        }
+
+        #endregion
     }
 }
