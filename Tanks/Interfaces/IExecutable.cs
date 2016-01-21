@@ -1,10 +1,8 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace Tanks
 {
-    //public delegate  ExecuteFunction(GetUnitPosition )
-    public delegate ISerializable GetUnitPosition(Point swapPosition);
+    public delegate IPositionable GetUnitPosition(Point swapPosition);
     public enum CommandResult
     {
         Moved,
@@ -13,12 +11,15 @@ namespace Tanks
         Fire,
         TankKill,
         FireFail,
-        OK,
-        ProjectileDestoyed,
-        ProjectileKill
+        ProjectileMoved,
+        CanMove,
+        CantMove,
+        EnemyVisible,
+        EnemyNotVisible,
+        Unknown
     }
     public interface IExecutable
     {
-        CommandResult NextComand(GetUnitPosition getUnitt);
+        CommandResult NextComand();
     }
 }
