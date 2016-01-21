@@ -72,7 +72,7 @@ namespace Tanks
 
         public void Draw(Graphics graphics)
         {
-            foreach(IDrawable unit in m_field.GetCollection())
+            foreach(IDrawable unit in m_field)
             {
                 unit.Draw(graphics);
             }
