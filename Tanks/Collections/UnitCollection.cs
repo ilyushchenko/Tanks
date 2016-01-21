@@ -1,62 +1,37 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 
 namespace Tanks
 {
     public class UnitCollection
     {
-        // TODO Почитстить код
-        /*public IPositionable this[int i]
-        {
-            get
-            {
-                return m_units[i];
-            }
-            set
-            {
-                m_units[i] = value;
-            }
-        }*/
-
-        public int GetCount()
-        {
-            return m_units.Count;
-        }
-        private List<IPositionable> m_units = new List<IPositionable>();
-
-        public List<IPositionable> GetCollection()
-        {
-            return m_units;
-        }
+        #region Add/Remove/Get/Exist
 
         public void Add(IPositionable unit)
         {
             m_units.Add(unit);
         }
 
-        internal void Remove(Point position)
+        public void Remove(IEqual unit)
         {
-            for(int i = 0; i < m_units.Count; i++)
-            {
-                if(m_units[i].Position == position)
-                {
-                    int index = m_units.IndexOf(m_units[i]);
-                    m_units.RemoveAt(index);
-                }
-            }
+            m_units.Remove(m_units.Find(p => unit.Equal(p as IEqual)));
         }
 
-        public void Draw(Graphics graphics)
+        public void Remove(Point position)
         {
-            foreach (IDrawable unit in m_units)
-            {
-                unit.Draw(graphics);
-            }
+            m_units.Remove(m_units.Find(p => p.Position == position));
+        }
+
+        public IPositionable GetUnit(Point position)
+        {
+            return m_units.Find(p => p.Position == position);
+        }
+
+        public List<IPositionable> GetAllUnitsOnCell(IPositionable unit)
+        {
+            return m_units.FindAll(p => p.Position == unit.Position);
         }
 
         public bool Exist(Point position)
@@ -71,39 +46,50 @@ namespace Tanks
             return false;
         }
 
-        public IPositionable GetUnit(Point position)
-        {
-            for(int i = 0; i < m_units.Count; i++)
-            {
-                if(m_units[i].Position == position)
-                {
-                    return m_units[i];
-                }
-            }
-            return null;
-        }
+        #endregion
 
-        public void SetUnit(IPositionable unit)
+        #region Draw
+
+        public void Draw(Graphics graphics)
         {
-            for(int i = 0; i < m_units.Count; i++)
+            foreach (IDrawable unit in m_units)
             {
-                if(m_units[i].Position == unit.Position)
-                {
-                    m_units[i] = unit;
-                }
+                unit.Draw(graphics);
             }
         }
 
-        // TODO Почитстить код
-        /*public void Save(string path)
+        #endregion
+
+        #region Save/Load
+
+        public void Save(StreamWriter sw)
         {
-            throw new Exception();
+            foreach(ISerializable unit in m_units)
+            {
+                unit.Save(sw);
+            }
         }
 
-        public void Load(string path)
+        public void Load(StreamReader sr)
         {
-            throw new Exception();
-        }*/
+            while(!sr.EndOfStream)
+            {
+                string type = sr.ReadLine();
+                ISerializable unit;
+                // Switch, для будущих модификаций
+                switch(type)
+                {
+                    case "wall":
+                        unit = new Wall();
+                        break;
+                    default:
+                        unit = new Wall();
+                        break;
+                }
+                unit.Load(sr);
+                Add(unit as IPositionable);
+            }
+        }
 
         public IEnumerator GetEnumerator()
         {
@@ -112,5 +98,13 @@ namespace Tanks
                 yield return m_units[i];
             }
         }
+
+        #endregion
+
+        #region Variables
+
+        private List<IPositionable> m_units = new List<IPositionable>();
+
+        #endregion
     }
 }
