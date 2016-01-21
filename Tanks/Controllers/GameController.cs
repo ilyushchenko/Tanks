@@ -28,7 +28,7 @@ namespace Tanks
 
         public void PutTank(Tank tank)
         {
-            Random rand = new Random(DateTime.Now.Millisecond);
+            Random rand = new Random();
             bool notSet = false;
             do
             {
@@ -43,49 +43,86 @@ namespace Tanks
                     m_field.Add(tank);
                     notSet = false;
                 }
+
             } while(notSet);
         }
 
         public void NextStep()
         {
-            foreach(ISerializable unit in m_field)
+            if(Status == Status.Playing)
             {
-                if(unit is IExecutable)
+                CheckGameStatus();
+                foreach(IPositionable unit in m_field)
                 {
-                    IExecutable executableUnit = unit as IExecutable;
-                    CommandResult resultUnit = executableUnit.NextComand(m_field.GetUnit);
-                    switch(resultUnit)
+                    if(unit is IExecutable)
                     {
-                        case CommandResult.Fire:
-                            Fire(unit);
-                            break;
-                        case CommandResult.TankKill:
-                            KillByTank(unit);
-                            break;
-                        case CommandResult.FireFail:
-                            break;
-                        case CommandResult.ProjectileDestoyed:
-                            DestroyProjectile(unit);
-                            break;
-                        case CommandResult.ProjectileKill:
-                            KillByProjectile(unit);
-                            break;
+                        IExecutable executableUnit = unit as IExecutable;
+                        CommandResult resultUnit = executableUnit.NextComand();
+                        switch(resultUnit)
+                        {
+                            case CommandResult.Fire:
+                                Fire(unit);
+                                break;
+                            case CommandResult.TankKill:
+                                KillByTank(unit);
+                                break;
+                            case CommandResult.FireFail:
+                                break;
+                            case CommandResult.ProjectileMoved:
+                                ProjectileMoved(unit);
+                                break;
+                        }
                     }
                 }
+            }           
+        }
+
+        private void ProjectileMoved(IPositionable unit)
+        {
+            IPositionable searchedUnit = m_field.GetUnit(unit.Position);
+        }
+
+        private void CheckGameStatus()
+        {
+            int count = 0;
+            Tank winner = null;
+            foreach(ISerializable unit in m_field)
+            {
+                if(unit is Tank)
+                {
+                    winner = unit as Tank;
+                    count++;
+                }
             }
+            if(count == 1)
+            {
+                Status = Status.End;
+            }
+        }
+
+        public IScorable GetWinner()
+        {
+            foreach(ISerializable unit in m_field)
+            {
+                if(unit is Tank )
+                {
+                    return unit as IScorable;
+                }
+            }
+            return null;
         }
 
         #region Методы обработки результата
 
-        private void DestroyProjectile(ISerializable unit)
+        private void DestroyProjectile(IPositionable unit)
         {
-            Point currentPosition = (unit as IPositionable).Position;
+            Point currentPosition = unit.Position;
             m_field.Remove(currentPosition);
         }
 
-        private void KillByProjectile(ISerializable unit)
+        private void KillByProjectile(IPositionable unit)
         {
-            Point position = (unit as IPositionable).Position;
+            Point position = unit.Position;
             Direction direction = (unit as IDirectinable).Direction;
             Point nextPosition = GetNextPosition(position, direction);
             m_field.Remove(position);
@@ -93,17 +130,17 @@ namespace Tanks
             m_field.Add(new DestroyedTank(nextPosition));
         }
 
-        private void Fire(ISerializable unit)
+        private void Fire(IPositionable unit)
         {
-            Point currentPosition = (unit as IPositionable).Position;
+            Point currentPosition = unit.Position;
             Direction direction = (unit as IDirectinable).Direction;
             Point nextPosition = GetNextPosition(currentPosition, direction);
             m_field.Add(new Projectile(nextPosition, direction));
         }
 
-        private void KillByTank(ISerializable unit)
+        private void KillByTank(IPositionable unit)
         {
-            Point currentPosition = (unit as IPositionable).Position;
+            Point currentPosition = unit.Position;
             Direction direction = (unit as IDirectinable).Direction;
             Point nextPosition = GetNextPosition(currentPosition, direction);
             m_field.Remove(nextPosition);
@@ -111,7 +148,5 @@ namespace Tanks
         }
 
         #endregion
-
-        private Level m_level;
     }
 }
