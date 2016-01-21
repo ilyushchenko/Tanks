@@ -10,16 +10,16 @@ namespace Tanks
 {
     public class Player
     {
-        public string Nick
+        public string Title
         {
             get
             {
-                return m_nick;
+                return m_title;
             }
 
             set
             {
-                m_nick = value;
+                m_title = value;
             }
         }
 
@@ -60,8 +60,32 @@ namespace Tanks
 
         private int step = 0;
 
-        private string m_nick;
+        private string m_title;
 
         private List<Commands> m_commnads = new List<Commands>();
+
+        public Commands NextComand(bool isResult)
+        {
+            Commands command;
+            if(isResult)
+            {
+                command = m_commnads[step++];
+                step++;
+            }
+            else
+            {
+                step++;
+                if(step == m_commnads.Count)
+                {
+                    step = 0;
+                }
+                command = m_commnads[step++];
+            }
+            if(step >= m_commnads.Count)
+            {
+                step = 0;
+            }
+            return command;
+        }
     }
 }
