@@ -18,8 +18,22 @@ namespace Tanks
             return m_gameController;
         }
 
+        public ScoreTableController GetScoreTable()
+        {
+            return m_scoreTable;
+        }
+
+        public ProgramEditorController GetProgramEditor()
+        {
+            return m_programEditor;
+        }
+
         private EditorController m_editorController = new EditorController();
 
         private GameController m_gameController = new GameController();
+
+        private ScoreTableController m_scoreTable = new ScoreTableController();
+
+        private ProgramEditorController m_programEditor = new ProgramEditorController();
     }
 }
