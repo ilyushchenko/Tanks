@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,10 +18,6 @@ namespace Tanks
         public LevelEditor(EditorController editor)
         {
             InitializeComponent();
-            //this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
-            //this.UpdateStyles();
-            //SetStyle(ControlStyles.Opaque | ControlStyles.AllPaintingInWmPaint, true);
-            //m_editor = editor;
         }
 
         private void btnLoadLevel_Click(object sender, EventArgs e)
@@ -33,24 +30,33 @@ namespace Tanks
             }
             else
             {
-                m_editor = new EditorController();
-                m_editor.LoadLevel(tbxLevelLoad.Text);
+                if(tbxLevelLoad.TextLength > 0)
+                {
+                    m_editor = new EditorController();
+                    m_editor.LoadLevel(tbxLevelLoad.Text);
+                }
+                else
+                {
+                    MessageBox.Show("Путь не выбран!");
+                    return;
+                }
             }
-            userControl11.Size = new Size(m_editor.N * m_editor.Width, m_editor.M * m_editor.Height);
-            userControl11.Invalidate();
-        }
-
-        private void LevelEditor_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            
+            ucField.Visible = true;
+            ucField.Size = new Size(m_editor.N * m_editor.Width, m_editor.M * m_editor.Height);
+            Width += ucField.Width + 10;
+            if(ucField.Height + 50> Height)
+            {
+                Height = ucField.Height + 60;
+            }
+            ucField.Invalidate();
         }
 
         private void btnLevelSave_Click(object sender, EventArgs e)
         {
-            if (tbxSaveName.TextLength > 0 && tbxSavePath.TextLength > 0)
+            if (tbxSavePath.TextLength > 0)
             {
-                m_editor.SaveLevel(tbxSaveName.Text);
-                MessageBox.Show("Done!");
+                m_editor.SaveLevel(tbxSavePath.Text);
+                MessageBox.Show("Уровень сохранен!");
             }
             else
             {
@@ -67,47 +73,36 @@ namespace Tanks
             }
         }
 
-        private void pnlBattlefield_Paint(object sender, PaintEventArgs e)
+        private void btnSavePath_Click(object sender, EventArgs e)
         {
-            if (m_editor != null)
+            DialogResult dialog = saveFileDialog.ShowDialog();
+            if(dialog == DialogResult.OK)
             {
-                //m_editor.Draw(e.Graphics);
+                tbxSavePath.Text = saveFileDialog.FileName;
             }
         }
 
-        private void pnlBattlefield_MouseMove(object sender, MouseEventArgs e)
+        private void ucField_Paint(object sender, PaintEventArgs e)
         {
-            tbxSaveName.Text = string.Format("{0} {1}", e.X, e.Y);
-            //pnlBattlefield.Invalidate();
+            m_editor.Draw(e.Graphics);
         }
 
-        private void pnlBattlefield_MouseDown(object sender, MouseEventArgs e)
+        private void ucField_MouseDown(object sender, MouseEventArgs e)
         {
             m_editor.CheckWall(e.X, e.Y);
-            userControl11.Invalidate();
-
+            ucField.Invalidate();
         }
 
-        private void userControl11_Load(object sender, EventArgs e)
+        private void rbnLevelLoad_CheckedChanged(object sender, EventArgs e)
         {
-
+            pnlLoad.Enabled = true;
+            pnlCreate.Enabled = false;
         }
 
-        private void userControl11_Paint(object sender, PaintEventArgs e)
+        private void rbnLevelCreate_CheckedChanged(object sender, EventArgs e)
         {
-            if(m_editor != null)
-            {
-                //Graphics bufG = Graphics.FromImage(buf);
-                //m_editor.Draw(bufG);
-                m_editor.Draw(e.Graphics);
-                //e.Graphics.DrawImage(buf, 0, 0);
-            }
-        }
-
-        private void userControl11_MouseDown(object sender, MouseEventArgs e)
-        {
-            m_editor.CheckWall(e.X, e.Y);
-            userControl11.Invalidate();
+            pnlCreate.Enabled = true;
+            pnlLoad.Enabled = false;
         }
     }
 }

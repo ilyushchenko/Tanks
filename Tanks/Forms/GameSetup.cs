@@ -54,9 +54,11 @@ namespace Tanks
             {
                 Tank tank = new Tank();
                 Player player = new Player();
+                Radar radar = new Radar(m_gameController.GetField());
                 player.LoadCommands(tbxList[i].Text);
                 tank.SetColor(cbxList[i].SelectedItem.ToString());
                 tank.SetPlayer(player);
+                tank.SetRadar(radar);
                 m_gameController.PutTank(tank);
             }
 
@@ -65,6 +67,15 @@ namespace Tanks
         public GameController GetLevelSetup()
         {
             return m_gameController;
+        }
+
+        private void btnSelectLevel_Click(object sender, EventArgs e)
+        {
+            DialogResult dialog = openFileDialog.ShowDialog();
+            if(dialog == DialogResult.OK)
+            {
+                tbxLevelPath.Text = openFileDialog.FileName;
+            }
         }
     }
 }

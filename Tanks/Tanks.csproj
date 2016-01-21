@@ -48,10 +48,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\DestroyedTank.cs" />
-    <Compile Include="Interfaces\IDerictable.cs" />
+    <Compile Include="Interfaces\IScorable.cs" />
+    <Compile Include="Forms\ScoreTable.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ScoreTable.Designer.cs">
+      <DependentUpon>ScoreTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\ScoreTableController.cs" />
+    <Compile Include="Interfaces\IDirectinable.cs" />
     <Compile Include="Interfaces\IExecutable.cs" />
     <Compile Include="Core\Commands.cs" />
-    <Compile Include="Core\Floor.cs" />
     <Compile Include="Core\Projectile.cs" />
     <Compile Include="Images.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -88,24 +95,35 @@
     <Compile Include="Forms\MainMenu.Designer.cs">
       <DependentUpon>MainMenu.cs</DependentUpon>
     </Compile>
+    <Compile Include="Core\Radar.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Forms\ProgramEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ProgramEditor.Designer.cs">
+      <DependentUpon>ProgramEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\ProgramEditorController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Core\SourceFabric.cs" />
+    <Compile Include="SourceFabric.cs" />
     <Compile Include="Core\Tank.cs" />
     <Compile Include="Collections\UnitCollection.cs" />
     <Compile Include="Core\Wall.cs" />
     <Compile Include="Core\Player.cs" />
-    <Compile Include="UserControl1.cs">
+    <Compile Include="Field.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControl1.Designer.cs">
-      <DependentUpon>UserControl1.cs</DependentUpon>
+    <Compile Include="Field.Designer.cs">
+      <DependentUpon>Field.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Forms\GameField.resx">
       <DependentUpon>GameField.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\GameSetup.resx">
       <DependentUpon>GameSetup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ScoreTable.resx">
+      <DependentUpon>ScoreTable.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Images.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -117,6 +135,9 @@
     <EmbeddedResource Include="Forms\MainMenu.resx">
       <DependentUpon>MainMenu.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ProgramEditor.resx">
+      <DependentUpon>ProgramEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -126,10 +147,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="UserControl1.resx">
-      <DependentUpon>UserControl1.cs</DependentUpon>
+    <EmbeddedResource Include="Field.resx">
+      <DependentUpon>Field.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagram2.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -150,16 +171,34 @@
     <None Include="Resources\Tank.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Red.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Blue.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Floor.bmp" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\Projectile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Red.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Yellow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Purple.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Pink.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Orange.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Green.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Fire.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Blue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Black.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

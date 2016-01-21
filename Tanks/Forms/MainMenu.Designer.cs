@@ -36,9 +36,9 @@
             // 
             // btnGameStart
             // 
-            this.btnGameStart.Location = new System.Drawing.Point(84, 28);
+            this.btnGameStart.Location = new System.Drawing.Point(12, 26);
             this.btnGameStart.Name = "btnGameStart";
-            this.btnGameStart.Size = new System.Drawing.Size(100, 40);
+            this.btnGameStart.Size = new System.Drawing.Size(100, 61);
             this.btnGameStart.TabIndex = 0;
             this.btnGameStart.Text = "Старт игры";
             this.btnGameStart.UseVisualStyleBackColor = true;
@@ -46,9 +46,9 @@
             // 
             // btnLevelEditor
             // 
-            this.btnLevelEditor.Location = new System.Drawing.Point(84, 74);
+            this.btnLevelEditor.Location = new System.Drawing.Point(132, 26);
             this.btnLevelEditor.Name = "btnLevelEditor";
-            this.btnLevelEditor.Size = new System.Drawing.Size(100, 40);
+            this.btnLevelEditor.Size = new System.Drawing.Size(100, 61);
             this.btnLevelEditor.TabIndex = 0;
             this.btnLevelEditor.Text = "Редактор уровней";
             this.btnLevelEditor.UseVisualStyleBackColor = true;
@@ -56,33 +56,35 @@
             // 
             // btnScoreTable
             // 
-            this.btnScoreTable.Location = new System.Drawing.Point(84, 166);
+            this.btnScoreTable.Location = new System.Drawing.Point(132, 108);
             this.btnScoreTable.Name = "btnScoreTable";
-            this.btnScoreTable.Size = new System.Drawing.Size(100, 40);
+            this.btnScoreTable.Size = new System.Drawing.Size(100, 61);
             this.btnScoreTable.TabIndex = 0;
             this.btnScoreTable.Text = "Таблица рекордов";
             this.btnScoreTable.UseVisualStyleBackColor = true;
+            this.btnScoreTable.Click += new System.EventHandler(this.btnScoreTable_Click);
             // 
             // btnProgramEditor
             // 
-            this.btnProgramEditor.Location = new System.Drawing.Point(84, 120);
+            this.btnProgramEditor.Location = new System.Drawing.Point(12, 108);
             this.btnProgramEditor.Name = "btnProgramEditor";
-            this.btnProgramEditor.Size = new System.Drawing.Size(100, 40);
+            this.btnProgramEditor.Size = new System.Drawing.Size(100, 61);
             this.btnProgramEditor.TabIndex = 0;
             this.btnProgramEditor.Text = "Редактор программ";
             this.btnProgramEditor.UseVisualStyleBackColor = true;
+            this.btnProgramEditor.Click += new System.EventHandler(this.btnProgramEditor_Click);
             // 
             // MainMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.ClientSize = new System.Drawing.Size(244, 216);
             this.Controls.Add(this.btnProgramEditor);
             this.Controls.Add(this.btnScoreTable);
             this.Controls.Add(this.btnLevelEditor);
             this.Controls.Add(this.btnGameStart);
             this.Name = "MainMenu";
-            this.Text = "Form1";
+            this.Text = "Танки";
             this.ResumeLayout(false);
 
         }

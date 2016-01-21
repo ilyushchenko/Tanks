@@ -1,12 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Tanks
@@ -23,7 +15,6 @@ namespace Tanks
         private void btnLevelEditor_Click(object sender, EventArgs e)
         {
             LevelEditor levelEditor = new LevelEditor(m_source.GetEditorController());
-            //levelEditor.Show();
             levelEditor.Show();
         }
 
@@ -31,6 +22,18 @@ namespace Tanks
         {
             GameField gameField = new GameField(m_source.GetGameController());
             gameField.Show();
+        }
+
+        private void btnScoreTable_Click(object sender, EventArgs e)
+        {
+            ScoreTable scoreTable = new ScoreTable(m_source.GetScoreTable());
+            scoreTable.Show();
+        }
+
+        private void btnProgramEditor_Click(object sender, EventArgs e)
+        {
+            ProgramEditor programEditor = new ProgramEditor(m_source.GetProgramEditor());
+            programEditor.Show();
         }
     }
 }

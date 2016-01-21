@@ -29,38 +29,38 @@
         private void InitializeComponent()
         {
             this.tbxLevelPath = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnSelectLevel = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.lblHelpSelectLevel = new System.Windows.Forms.Label();
             this.button3 = new System.Windows.Forms.Button();
             this.lblHelpCountOfPlayers = new System.Windows.Forms.Label();
             this.nudCountOfTanks = new System.Windows.Forms.NumericUpDown();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.nudCountOfTanks)).BeginInit();
-            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tbxLevelPath
             // 
             this.tbxLevelPath.Location = new System.Drawing.Point(120, 15);
             this.tbxLevelPath.Name = "tbxLevelPath";
-            this.tbxLevelPath.Size = new System.Drawing.Size(100, 20);
+            this.tbxLevelPath.Size = new System.Drawing.Size(124, 20);
             this.tbxLevelPath.TabIndex = 0;
             this.tbxLevelPath.Text = "test.txt";
             // 
-            // button1
+            // btnSelectLevel
             // 
-            this.button1.Location = new System.Drawing.Point(248, 9);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnSelectLevel.Location = new System.Drawing.Point(250, 12);
+            this.btnSelectLevel.Name = "btnSelectLevel";
+            this.btnSelectLevel.Size = new System.Drawing.Size(75, 23);
+            this.btnSelectLevel.TabIndex = 1;
+            this.btnSelectLevel.Text = "Обзор";
+            this.btnSelectLevel.UseVisualStyleBackColor = true;
+            this.btnSelectLevel.Click += new System.EventHandler(this.btnSelectLevel_Click);
             // 
             // button2
             // 
             this.button2.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button2.Location = new System.Drawing.Point(321, 16);
+            this.button2.Location = new System.Drawing.Point(334, 38);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 2;
@@ -79,18 +79,18 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(234, 16);
+            this.button3.Location = new System.Drawing.Point(169, 38);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 5;
-            this.button3.Text = "button3";
+            this.button3.Text = "Добавить";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // lblHelpCountOfPlayers
             // 
             this.lblHelpCountOfPlayers.AutoSize = true;
-            this.lblHelpCountOfPlayers.Location = new System.Drawing.Point(-1, 26);
+            this.lblHelpCountOfPlayers.Location = new System.Drawing.Point(12, 48);
             this.lblHelpCountOfPlayers.Name = "lblHelpCountOfPlayers";
             this.lblHelpCountOfPlayers.Size = new System.Drawing.Size(101, 13);
             this.lblHelpCountOfPlayers.TabIndex = 3;
@@ -98,53 +98,41 @@
             // 
             // nudCountOfTanks
             // 
-            this.nudCountOfTanks.Location = new System.Drawing.Point(107, 19);
+            this.nudCountOfTanks.Location = new System.Drawing.Point(120, 41);
             this.nudCountOfTanks.Maximum = new decimal(new int[] {
             8,
             0,
             0,
             0});
             this.nudCountOfTanks.Minimum = new decimal(new int[] {
-            1,
+            2,
             0,
             0,
             0});
             this.nudCountOfTanks.Name = "nudCountOfTanks";
-            this.nudCountOfTanks.Size = new System.Drawing.Size(120, 20);
+            this.nudCountOfTanks.Size = new System.Drawing.Size(43, 20);
             this.nudCountOfTanks.TabIndex = 10;
             this.nudCountOfTanks.Value = new decimal(new int[] {
-            1,
+            2,
             0,
             0,
             0});
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.nudCountOfTanks);
-            this.groupBox1.Controls.Add(this.button2);
-            this.groupBox1.Controls.Add(this.button3);
-            this.groupBox1.Controls.Add(this.lblHelpCountOfPlayers);
-            this.groupBox1.Location = new System.Drawing.Point(13, 54);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(397, 111);
-            this.groupBox1.TabIndex = 11;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "groupBox1";
             // 
             // GameSetup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(422, 529);
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.nudCountOfTanks);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.lblHelpSelectLevel);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.button3);
+            this.Controls.Add(this.btnSelectLevel);
+            this.Controls.Add(this.lblHelpCountOfPlayers);
             this.Controls.Add(this.tbxLevelPath);
             this.Name = "GameSetup";
             this.Text = ".";
             ((System.ComponentModel.ISupportInitialize)(this.nudCountOfTanks)).EndInit();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -153,12 +141,12 @@
         #endregion
 
         private System.Windows.Forms.TextBox tbxLevelPath;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnSelectLevel;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label lblHelpSelectLevel;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Label lblHelpCountOfPlayers;
         private System.Windows.Forms.NumericUpDown nudCountOfTanks;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.OpenFileDialog openFileDialog;
     }
 }
