@@ -10,33 +10,31 @@ namespace Tanks
 {
     public class UnitCollection
     {
-        public ISerializable this[int i]
+        // TODO Почитстить код
+        /*public IPositionable this[int i]
         {
-            // Аксессор для получения данных,
             get
             {
                 return m_units[i];
             }
-            // Аксессор для установки данных,
             set
             {
                 m_units[i] = value;
             }
-        }
-
+        }*/
 
         public int GetCount()
         {
             return m_units.Count;
         }
-        private List<ISerializable> m_units = new List<ISerializable>();
+        private List<IPositionable> m_units = new List<IPositionable>();
 
-        public List<ISerializable> GetCollection()
+        public List<IPositionable> GetCollection()
         {
             return m_units;
         }
 
-        public void Add(ISerializable unit)
+        public void Add(IPositionable unit)
         {
             m_units.Add(unit);
         }
@@ -45,23 +43,13 @@ namespace Tanks
         {
             for(int i = 0; i < m_units.Count; i++)
             {
-                if((m_units[i] as IPositionable).Position == position)
+                if(m_units[i].Position == position)
                 {
                     int index = m_units.IndexOf(m_units[i]);
                     m_units.RemoveAt(index);
                 }
             }
         }
-
-        //public void Remove(ISerializable unit)
-        //{
-        //    m_units.RemoveAll(p => (unit.Equal(p)));
-        //}
-
-        //public bool Exist(ISerializable unit)
-        //{
-        //    return m_units.Exists(p => unit.Equal(p));
-        //}
 
         public void Draw(Graphics graphics)
         {
@@ -73,9 +61,9 @@ namespace Tanks
 
         public bool Exist(Point position)
         {
-            foreach(ISerializable unit in m_units)
+            foreach(IPositionable unit in m_units)
             {
-                if((unit as IPositionable).Position == position)
+                if(unit.Position == position)
                 {
                     return true;
                 }
@@ -83,19 +71,11 @@ namespace Tanks
             return false;
         }
 
-        public ISerializable GetUnit(Point position)
+        public IPositionable GetUnit(Point position)
         {
-            /*foreach(IPositionable unit in m_units)
-            {
-                if(unit.Position == position)
-                {
-                    return unit as ISerializable;
-                }
-            }*/
             for(int i = 0; i < m_units.Count; i++)
             {
-                IPositionable unit = m_units[i] as IPositionable;
-                if(unit.Position == position)
+                if(m_units[i].Position == position)
                 {
                     return m_units[i];
                 }
@@ -103,18 +83,19 @@ namespace Tanks
             return null;
         }
 
-        public void SetUnit(ISerializable unit)
+        public void SetUnit(IPositionable unit)
         {
             for(int i = 0; i < m_units.Count; i++)
             {
-                if((m_units[i] as IPositionable).Position == (unit as IPositionable).Position)
+                if(m_units[i].Position == unit.Position)
                 {
                     m_units[i] = unit;
                 }
             }
         }
 
-        public void Save(string path)
+        // TODO Почитстить код
+        /*public void Save(string path)
         {
             throw new Exception();
         }
@@ -122,7 +103,7 @@ namespace Tanks
         public void Load(string path)
         {
             throw new Exception();
-        }
+        }*/
 
         public IEnumerator GetEnumerator()
         {
