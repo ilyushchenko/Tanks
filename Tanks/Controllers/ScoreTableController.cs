@@ -1,18 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Tanks
 {
     public class ScoreTableController
     {
+        #region Constructors
+
         public ScoreTableController()
         {
             Load();
         }
+
+        #endregion
+
+        #region Save/Load
 
         public void Load()
         {
@@ -48,9 +51,13 @@ namespace Tanks
             }
         }
 
+        #endregion
+
+        #region Add/Get
+
         public void Add(IScorable unit)
         {
-            Player player = unit.SaveResult();
+            CommandController player = unit.SaveResult();
             string title = player.Title;
             if(m_records.ContainsKey(title))
             {
@@ -68,10 +75,18 @@ namespace Tanks
             return m_records;
         }
 
+        #endregion
+
+        #region Constants and variables
+
         private const string FILE = "score.txt";
+
         private const string DIRECTORY = "Private";
+
         private const string PATH = DIRECTORY + "\\" + FILE;
 
         Dictionary<string, int> m_records = new Dictionary<string, int>();
+
+        #endregion
     }
 }
