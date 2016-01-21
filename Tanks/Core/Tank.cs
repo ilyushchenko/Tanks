@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 
 namespace Tanks
 {
-    public class Tank : IPositionable, ISerializable, IDrawable, IExecutable, IDirectinable, IScorable
+    public class Tank : IPositionable, IDrawable, IExecutable, IDirectinable, IScorable, IEqual, IDestroyable
     {
         #region Constructors
 
@@ -47,24 +42,6 @@ namespace Tanks
 
         #endregion
 
-        #region ISerializable
-
-        public void Load(StreamReader inFile)
-        {
-            string[] data = inFile.ReadLine().Split();
-            m_position.X = Convert.ToInt32(data[0]);
-            m_position.Y = Convert.ToInt32(data[1]);
-            SetColor(data[2]);
-        }
-
-        public void Save(StreamWriter outFile)
-        {
-            outFile.WriteLine("tank");
-            outFile.WriteLine("{0} {1} {2}", m_position.X, m_position.Y, m_tankColor.ToString().ToLower());
-        }
-
-        #endregion
-
         #region IDirectable
 
         public Direction Direction
@@ -80,10 +57,48 @@ namespace Tanks
             }
         }
 
+        #endregion
+
+        #region IEqual
+
+        public bool Equal(IEqual unit)
+        {
+            if(unit != null && unit is Tank)
+            {
+                if((unit as IPositionable).Position == Position)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
         #endregion
 
-        #region Action of tank
+        #region IDestroyable
+
+        public void Destroy()
+        {
+            m_status = Status.Dead;
+            m_tankImage = Images.Fire;
+        }
+
+        #endregion
+
+        #region Actions of tank
+
+        public CommandResult NextComand()
+        {
+            if(m_status == Status.Alive)
+            {
+                Commands command = m_commandComtroller.NextComand();
+                if(m_actions.ContainsKey(command))
+                {
+                    return m_actions[command]();
+                }
+            }
+            return CommandResult.Unknown;
+        }
 
         public CommandResult TurnLeft()
         {
@@ -100,8 +115,6 @@ namespace Tanks
                     break;
                 case Direction.Right:
                     m_direction = Direction.Up;
-                    break;
-                default:
                     break;
             }
             m_tankImage.RotateFlip(RotateFlipType.Rotate270FlipNone);
@@ -123,8 +136,6 @@ namespace Tanks
                     break;
                 case Direction.Right:
                     m_direction = Direction.Down;
-                    break;
-                default:
                     break;
             }
             m_tankImage.RotateFlip(RotateFlipType.Rotate90FlipNone);
@@ -172,14 +183,32 @@ namespace Tanks
 
         public CommandResult CheckEnemy()
         {
-            isEnemyVisible = (m_radar.CheckEnemy(m_position, m_direction) == Radar.RadarResult.Enemy) ? true : false;
-            return (isEnemyVisible) ? CommandResult.EnemyVisible : CommandResult.EnemyNotVisible;
+            bool isEnemyVisible = (m_radar.CheckEnemy(m_position, m_direction) == Radar.RadarResult.Enemy) ? true : false;
+            if(isEnemyVisible)
+            {
+                m_commandComtroller.SetTrueBranch();
+                return CommandResult.EnemyVisible;
+            }
+            else
+            {
+                m_commandComtroller.SetFalseBranch();
+                return CommandResult.EnemyNotVisible;
+            }
         }
 
         public CommandResult CheckCell()
         {
-            isCanMove = (m_radar.CheckCell(m_position, m_direction) == Radar.RadarResult.Free) ? true : false;
-            return (isCanMove) ? CommandResult.CanMove : CommandResult.CantMove;
+            bool isCanMove = (m_radar.CheckCell(m_position, m_direction) == Radar.RadarResult.Free) ? true : false;
+            if(isCanMove)
+            {
+                m_commandComtroller.SetTrueBranch();
+                return CommandResult.CanMove;
+            }
+            else
+            {
+                m_commandComtroller.SetFalseBranch();
+                return CommandResult.CantMove;
+            }
         }
 
         #endregion
@@ -218,6 +247,21 @@ namespace Tanks
             }
         }
 
+        public void SetRadar(Radar radar)
+        {
+            m_radar = radar;
+        }
+
+        public void SetPlayer(CommandController plaer)
+        {
+            m_commandComtroller = plaer;
+        }
+
+        public CommandController SaveResult()
+        {
+            return m_commandComtroller;
+        }
+
         private Colors GetColor(string color)
         {
             switch(color)
@@ -243,58 +287,16 @@ namespace Tanks
             }
         }
 
-        public void SetRadar(Radar radar)
-        {
-            m_radar = radar;
-        }
-
-        public void SetPlayer(Player plaer)
-        {
-            m_player = plaer;
-        }
-
-        public CommandResult NextComand()
-        {
-            // TODO Доделать следующую комманду
-            if(m_currentCommand == Commands.CheckCell || m_currentCommand == Commands.CheckEnemy)
-            {
-                if(m_currentCommand == Commands.CheckCell)
-                {
-                    m_currentCommand = m_player.NextComand(isCanMove);
-                }
-                else
-                {
-                    m_currentCommand = m_player.NextComand(isEnemyVisible);
-                }
-            }
-            else
-            {
-                m_currentCommand = m_player.NextComand();
-            }
-            if(m_commands.ContainsKey(m_currentCommand))
-            {
-                return m_commands[m_currentCommand]();
-            }
-            else
-            {
-                return CommandResult.Unknown;
-            }            
-        }
-
-        public Player SaveResult()
-        {
-            return m_player;
-        }
-
         private void InitializeCommands()
         {
-            m_commands.Add(Commands.Left, TurnLeft);
-            m_commands.Add(Commands.Right, TurnRight);
-            m_commands.Add(Commands.Move, Move);
-            m_commands.Add(Commands.Fire, Fire);
-            m_commands.Add(Commands.CheckCell, CheckCell);
-            m_commands.Add(Commands.CheckEnemy, CheckEnemy);
+            m_actions.Add(Commands.Left, TurnLeft);
+            m_actions.Add(Commands.Right, TurnRight);
+            m_actions.Add(Commands.Move, Move);
+            m_actions.Add(Commands.Fire, Fire);
+            m_actions.Add(Commands.CheckCell, CheckCell);
+            m_actions.Add(Commands.CheckEnemy, CheckEnemy);
         }
+
 
         #endregion
 
@@ -306,25 +308,21 @@ namespace Tanks
 
         #region Variables
 
-        private Direction m_direction;
-
         private Bitmap m_tankImage = Images.Tank;
 
         private Point m_position;
 
-        private Player m_player;
+        private CommandController m_commandComtroller;
 
         private Radar m_radar;
 
         private Colors m_tankColor;
 
-        public bool isCanMove;
+        private Direction m_direction;
 
-        public bool isEnemyVisible;
+        private Status m_status = Status.Alive;
 
-        private Commands m_currentCommand = Commands.Unknown;
-
-        private Dictionary<Commands, Action> m_commands = new Dictionary<Commands, Action>();
+        private Dictionary<Commands, Action> m_actions = new Dictionary<Commands, Action>();
 
         #endregion
 
@@ -341,6 +339,12 @@ namespace Tanks
             Red,
             Yellow,
             Unknown
+        }
+
+        private enum Status
+        {
+            Alive,
+            Dead
         }
         
         #endregion
