@@ -8,6 +8,12 @@ using System.Drawing;
 
 namespace Tanks
 {
+    public enum Status
+    {
+        Unplayed,
+        Playing,
+        End,
+    }
     public abstract class Level
     {
         public int M
@@ -23,6 +29,29 @@ namespace Tanks
             get
             {
                 return m_n;
+            }
+        }
+
+        public int Width
+        {
+            get { return Images.Tank.Width; }
+        }
+
+        public int Height
+        {
+            get { return Images.Tank.Height; }
+        }
+
+        public Status Status
+        {
+            get
+            {
+                return m_status;
+            }
+
+            set
+            {
+                m_status = value;
             }
         }
 
@@ -56,9 +85,6 @@ namespace Tanks
                     ISerializable unit;
                     switch (type)
                     {
-                        case "floor":
-                            unit = new Floor();
-                            break;
                         case "wall":
                             unit = new Wall();
                             break;
@@ -66,11 +92,11 @@ namespace Tanks
                             unit = new Tank();
                             break;
                         default:
-                            unit = new Floor();
+                            unit = new Wall();
                             break;
                     }
                     unit.Load(sr);
-                    m_field.Add(unit);
+                    m_field.Add(unit as IPositionable);
                 }
             }
         }
@@ -98,5 +124,9 @@ namespace Tanks
         protected int m_m;
 
         protected int m_n;
+
+        protected Status m_status = Status.Unplayed;
+
+
     }
 }
