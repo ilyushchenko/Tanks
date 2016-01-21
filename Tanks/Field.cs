@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace Tanks
 {
-    public partial class UserControl1 : UserControl
+    public partial class Field : UserControl
     {
-        public UserControl1()
+        public Field()
         {
             InitializeComponent();
         }

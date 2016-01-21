@@ -1,6 +1,6 @@
 ﻿namespace Tanks
 {
-    partial class UserControl1
+    partial class Field
     {
         /// <summary> 
         /// Обязательная переменная конструктора.
@@ -30,13 +30,13 @@
         {
             this.SuspendLayout();
             // 
-            // UserControl1
+            // Field
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Black;
+            this.BackColor = System.Drawing.Color.DarkGray;
             this.DoubleBuffered = true;
-            this.Name = "UserControl1";
+            this.Name = "Field";
             this.Size = new System.Drawing.Size(390, 305);
             this.ResumeLayout(false);
 
