@@ -252,7 +252,7 @@ namespace Tanks
             m_radar = radar;
         }
 
-        public void SetPlayer(CommandController plaer)
+        public void SetCommandController(CommandController plaer)
         {
             m_commandComtroller = plaer;
         }
