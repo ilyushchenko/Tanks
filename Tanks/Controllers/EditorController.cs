@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace Tanks
 {
@@ -24,11 +19,10 @@ namespace Tanks
             int curX = x / Width;
             int curY = y / Height;
             Point position = new Point(curX, curY);
-            //ISerializable unit = m_field.GetUnit(new Point(curX, curY));
             if(m_field.Exist(position))
             {
-                ISerializable unit = m_field.GetUnit(new Point(curX, curY));
-                if(!(unit is Tank))
+                IPositionable unit = m_field.GetUnit(new Point(curX, curY));
+                if(!OnBorder(unit))
                 {
                     m_field.Remove(position);
                 }
@@ -53,32 +47,15 @@ namespace Tanks
             }
         }
         
-        //TODO Доработать OnBorder
         private bool OnBorder(IPositionable unit)
         {
             Point position = unit.Position;
-            if (((position.X >= 0 && position.X <= m_n) && (position.Y == 0 || position.Y == m_m)) ||
-                ((position.Y >= 1 && position.Y <= m_m - 1) && (position.X == 0 || position.X == m_n)))
+            if (((position.X >= 0 && position.X <= m_n) && (position.Y == 0 || position.Y == m_m - 1)) ||
+                ((position.Y >= 1 && position.Y <= m_m - 1) && (position.X == 0 || position.X == m_n - 1)))
             {
                 return true;
             }
             return false;
         }
-
-        /*private void DrawGrid()
-        {
-            for(int i = 0; i < level.M; i++)
-            {
-                Point start = new Point(WIDTH * i, 0);
-                Point end = new Point(WIDTH * i, pbxBattleField.Height);
-                graphic.DrawLine(pen, start, end);
-            }
-            for(int i = 0; i < level.N; i++)
-            {
-                Point start = new Point(0, HEIGHT * i);
-                Point end = new Point(pbxBattleField.Width, HEIGHT * i);
-                graphic.DrawLine(pen, start, end);
-            }
-        }*/
     }
 }
