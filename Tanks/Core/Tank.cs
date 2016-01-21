@@ -8,7 +8,7 @@ using System.IO;
 
 namespace Tanks
 {
-    public class Tank : IPositionable, ISerializable, IDrawable, IExecutable, IDirectinable
+    public class Tank : IPositionable, ISerializable, IDrawable, IExecutable, IDirectinable, IScorable
     {
         #region Constructors
 
@@ -16,12 +16,7 @@ namespace Tanks
         {
             m_direction = Direction.Up;
             m_position = new Point(0, 0);
-        }
-
-        public Tank(Point position, Direction direction)
-        {
-            m_direction = direction;
-            m_position = position;
+            InitializeCommands();
         }
 
         #endregion
@@ -67,6 +62,24 @@ namespace Tanks
             outFile.WriteLine("tank");
             outFile.WriteLine("{0} {1} {2}", m_position.X, m_position.Y, m_tankColor.ToString().ToLower());
         }
+
+        #endregion
+
+        #region IDirectable
+
+        public Direction Direction
+        {
+            get
+            {
+                return m_direction;
+            }
+
+            set
+            {
+                m_direction = value;
+            }
+        }
+
 
         #endregion
 
@@ -118,105 +131,55 @@ namespace Tanks
             return CommandResult.Turned;
         }
 
-        //public void Move(Func<Point, ISerializable> GetUnit, Action<ISerializable> SetUnit)
-        //{
-        //    Point nextPosition = GetNextPosition(m_position, m_direction);
-        //    Point currentPosition = new Point(m_position.X, m_position.Y);
-        //    ISerializable swapUnit = GetUnit(nextPosition);
-        //    ISerializable currentUnit = GetUnit(currentPosition);
-        //    if(swapUnit is Floor)
-        //    {
-        //        Point tempUnit = currentPosition;
-        //        ((IPositionable)currentUnit).Position = ((IPositionable)swapUnit).Position;
-        //        ((IPositionable)swapUnit).Position = tempUnit;
-        //        SetUnit(swapUnit);
-        //        SetUnit(currentUnit);
-        //    }
-
-
-
-
-        //    /*ISerializable unit = swapPosition(Position, m_direction);
-        //    Point currentPosition = new Point(Position.X, Position.Y);
-        //    if(unit is Floor)
-        //    {
-        //        Position = (unit as IPositionable).Position;
-        //        (unit as IPositionable).Position = currentPosition;
-        //    }*/
-        //}
-
-        public CommandResult Move(GetUnitPosition getUnit)
+        public CommandResult Move()
         {
-            Point position = GetNextPosition(m_position, m_direction);
-            ISerializable unit = getUnit(position);
-            if(unit == null)
+            Radar.RadarResult result = m_radar.CheckCell(m_position, m_direction);
+            if(result == Radar.RadarResult.Free)
             {
-                m_position = position;
+                switch(m_direction)
+                {
+                    case Direction.Up:
+                        m_position.Offset(0, -1);
+                        break;
+                    case Direction.Down:
+                        m_position.Offset(0, 1);
+                        break;
+                    case Direction.Left:
+                        m_position.Offset(-1, 0);
+                        break;
+                    case Direction.Right:
+                        m_position.Offset(1, 0);
+                        break;
+                }
                 return CommandResult.Moved;
             }
             return CommandResult.MoveFail;
         }
 
-        public CommandResult Fire(GetUnitPosition getUnit)
+        public CommandResult Fire()
         {
-            Point position = GetNextPosition(m_position, m_direction);
-            ISerializable unit = getUnit(position);
-            if(unit == null)
+            Radar.RadarResult result = m_radar.CheckCell(m_position, m_direction);
+            if(result == Radar.RadarResult.Free)
             {
                 return CommandResult.Fire;
             }
-            else if(unit is Tank)
+            else if(result == Radar.RadarResult.Enemy)
             {
                 return CommandResult.TankKill;
             }
             return CommandResult.FireFail;
         }
 
-        public CommandResult CheckEnemy(GetUnitPosition getUnit)
+        public CommandResult CheckEnemy()
         {
-            // TODO Сдеалть проверку врага
-            return CommandResult.OK;
-
-
-            //Point nextPosition = GetNextPosition(m_position, m_direction);
-            //ISerializable nextUnit = getUnit(nextPosition);
-            //if(nextUnit is Tank)
-            //{
-            //    IsCanMove = true;
-            //}
-            //else
-            //{
-            //    IsCanMove = false;
-            //}
+            isEnemyVisible = (m_radar.CheckEnemy(m_position, m_direction) == Radar.RadarResult.Enemy) ? true : false;
+            return (isEnemyVisible) ? CommandResult.EnemyVisible : CommandResult.EnemyNotVisible;
         }
 
-        public CommandResult CheckCell(GetUnitPosition getUnit)
+        public CommandResult CheckCell()
         {
-            return CommandResult.OK;
-            /*Point position = GetNextPosition(m_position, m_direction);
-            ISerializable unit = getUnit(position);
-            if(unit == null)
-            {
-                IsCanMove = true;
-            }
-            else
-            {
-                IsCanMove = false;
-            }*/
-
-
-
-
-            //Point nextPosition = GetNextPosition(m_position, m_direction);
-            //ISerializable nextUnit = getUnit(nextPosition);
-            //if(nextUnit is Floor)
-            //{
-            //    IsEnemyVisible = true;
-            //}
-            //else
-            //{
-            //    IsEnemyVisible = false;
-            //}
+            isCanMove = (m_radar.CheckCell(m_position, m_direction) == Radar.RadarResult.Free) ? true : false;
+            return (isCanMove) ? CommandResult.CanMove : CommandResult.CantMove;
         }
 
         #endregion
@@ -228,17 +191,61 @@ namespace Tanks
             m_tankColor = GetColor(color);
             switch(m_tankColor)
             {
-                case Colors.Red:
-                    m_tankImage = Images.Red;
-                    break;
-                case Colors.Green:
+                case Colors.Black:
+                    m_tankImage = Images.Black;
                     break;
                 case Colors.Blue:
                     m_tankImage = Images.Blue;
                     break;
-                default:
+                case Colors.Green:
+                    m_tankImage = Images.Green;
+                    break;
+                case Colors.Orange:
+                    m_tankImage = Images.Orange;
+                    break;
+                case Colors.Pink:
+                    m_tankImage = Images.Pink;
+                    break;
+                case Colors.Purple:
+                    m_tankImage = Images.Purple;
+                    break;
+                case Colors.Red:
+                    m_tankImage = Images.Red;
+                    break;
+                case Colors.Yellow:
+                    m_tankImage = Images.Yellow;
                     break;
             }
+        }
+
+        private Colors GetColor(string color)
+        {
+            switch(color)
+            {
+                case "черный":
+                    return Colors.Red;
+                case "голубой":
+                    return Colors.Blue;
+                case "зеленый":
+                    return Colors.Green;
+                case "оранжевый":
+                    return Colors.Yellow;
+                case "розовый":
+                    return Colors.Pink;
+                case "малиновый":
+                    return Colors.Purple;
+                case "красный":
+                    return Colors.Red;
+                case "желтый":
+                    return Colors.Yellow;
+                default:
+                    return Colors.Unknown;
+            }
+        }
+
+        public void SetRadar(Radar radar)
+        {
+            m_radar = radar;
         }
 
         public void SetPlayer(Player plaer)
@@ -246,100 +253,54 @@ namespace Tanks
             m_player = plaer;
         }
 
-        public CommandResult NextComand(GetUnitPosition GetUnit)
+        public CommandResult NextComand()
         {
-            Commands command = m_player.NextComand();
-            switch(command)
+            // TODO Доделать следующую комманду
+            if(m_currentCommand == Commands.CheckCell || m_currentCommand == Commands.CheckEnemy)
             {
-                case Commands.Left:
-                    return TurnLeft();
-                case Commands.Right:
-                    return TurnRight();
-                case Commands.Move:
-                    return Move(GetUnit);
-                case Commands.CheckCell:
-                    return CheckCell(GetUnit);
-                case Commands.CheckEnemy:
-                    return CheckEnemy(GetUnit);
-                case Commands.Fire:
-                    return Fire(GetUnit);
-                case Commands.Unknown:
-                default:
-                    return CommandResult.OK;
+                if(m_currentCommand == Commands.CheckCell)
+                {
+                    m_currentCommand = m_player.NextComand(isCanMove);
+                }
+                else
+                {
+                    m_currentCommand = m_player.NextComand(isEnemyVisible);
+                }
             }
-            
+            else
+            {
+                m_currentCommand = m_player.NextComand();
+            }
+            if(m_commands.ContainsKey(m_currentCommand))
+            {
+                return m_commands[m_currentCommand]();
+            }
+            else
+            {
+                return CommandResult.Unknown;
+            }            
         }
 
-        private Point GetNextPosition(Point position, Direction direction)
+        public Player SaveResult()
         {
-            switch(direction)
-            {
-                case Direction.Up:
-                    return new Point(position.X, position.Y - 1);
-                case Direction.Down:
-                    return new Point(position.X, position.Y + 1);
-                case Direction.Left:
-                    return new Point(position.X - 1, position.Y);
-                case Direction.Right:
-                    return new Point(position.X + 1, position.Y);
-                default:
-                    return position;
-            }
+            return m_player;
         }
 
-        /*private void InitializeCommands()
+        private void InitializeCommands()
         {
-            m_commandsWithOutCheck.Add(Commands.Left, new ExecuteAction(TurnLeft));
-            m_commandsWithOutCheck.Add(Commands.Right, new ExecuteAction(TurnRight));
-            m_commandsWithCheck.Add(Commands.Move, new ExecuteMyAction(Move));
-            m_commandsWithCheck.Add(Commands.CheckCell, new ExecuteMyAction(CheckCell));
-            m_commandsWithCheck.Add(Commands.CheckEnemy, new ExecuteMyAction(CheckEnemy));
-            m_commandsWithCheck.Add(Commands.Fire, new ExecuteMyAction(Fire));
-        }*/
-
-        private Colors GetColor(string color)
-        {
-            switch(color)
-            {
-                case "красный":
-                case "red":
-                    return Colors.Red;
-                case "голубой":
-                case "blue":
-                    return Colors.Blue;
-                case "зеленый":
-                    return Colors.Green;
-                case "желтый":
-                    return Colors.Yellow;
-                case "фиолетовый":
-                    return Colors.Unknown;
-                case "малиновый":
-                    return Colors.Unknown;
-                case "черный":
-                    return Colors.Unknown;
-                case "коричневый":
-                    return Colors.Unknown;
-                default:
-                    return Colors.Unknown;
-            }
+            m_commands.Add(Commands.Left, TurnLeft);
+            m_commands.Add(Commands.Right, TurnRight);
+            m_commands.Add(Commands.Move, Move);
+            m_commands.Add(Commands.Fire, Fire);
+            m_commands.Add(Commands.CheckCell, CheckCell);
+            m_commands.Add(Commands.CheckEnemy, CheckEnemy);
         }
 
         #endregion
 
-        #region Delegates
+        #region Delegate
 
-        //public delegate void ExecuteAction();
-
-        //public delegate void ExecuteMyAction(ExecuteMovableAction action);
-
-        //public delegate void ExecuteMovableAction(Point swapPosition, Point currentPosition);
-
-        //public delegate ISerializable ExecuteMovableAction(Point swapPosition, Direction direction);
-
-        
-        public delegate void Set(ISerializable swapPosition);
-
-
+        public delegate CommandResult Action();
 
         #endregion
 
@@ -353,27 +314,17 @@ namespace Tanks
 
         private Player m_player;
 
+        private Radar m_radar;
+
         private Colors m_tankColor;
 
-        //private Dictionary<Commands, ExecuteAction> m_commandsWithOutCheck = new Dictionary<Commands, ExecuteAction>();
-        //private Dictionary<Commands, ExecuteMyAction> m_commandsWithCheck = new Dictionary<Commands, ExecuteMyAction>();
+        public bool isCanMove;
 
-        public bool IsCanMove { get; set; }
+        public bool isEnemyVisible;
 
-        public bool IsEnemyVisible { get; set; }
+        private Commands m_currentCommand = Commands.Unknown;
 
-        public Direction Direction
-        {
-            get
-            {
-                return m_direction;
-            }
-
-            set
-            {
-                m_direction = value;
-            }
-        }
+        private Dictionary<Commands, Action> m_commands = new Dictionary<Commands, Action>();
 
         #endregion
 
@@ -381,12 +332,17 @@ namespace Tanks
 
         private enum Colors
         {
-            Red,
-            Green,
+            Black,
             Blue,
+            Green,
+            Orange,
+            Pink,
+            Purple,
+            Red,
             Yellow,
             Unknown
         }
+        
         #endregion
     }
 }
