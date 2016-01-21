@@ -16,7 +16,18 @@ namespace Tanks
 
         public void Load()
         {
-            using(StreamReader sr = new StreamReader("Private\\score.txt"))
+            if(!Directory.Exists(DIRECTORY))
+            {
+                Directory.CreateDirectory(DIRECTORY);
+            }
+            if(!File.Exists(PATH))
+            {
+                using(FileStream fs = File.Create(PATH))
+                {
+                    fs.Close();
+                }
+            }
+            using(StreamReader sr = new StreamReader(PATH))
             {
                 while(!sr.EndOfStream)
                 {
@@ -28,7 +39,7 @@ namespace Tanks
 
         public void Save()
         {
-            using(StreamWriter sw = new StreamWriter("Private\\score.txt"))
+            using(StreamWriter sw = new StreamWriter(PATH))
             {
                 foreach(var record in m_records)
                 {
@@ -56,6 +67,10 @@ namespace Tanks
         {
             return m_records;
         }
+
+        private const string FILE = "score.txt";
+        private const string DIRECTORY = "Private";
+        private const string PATH = DIRECTORY + "\\" + FILE;
 
         Dictionary<string, int> m_records = new Dictionary<string, int>();
     }
