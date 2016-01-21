@@ -55,6 +55,11 @@ namespace Tanks
 
         #region Constructors
 
+        public Level()
+        {
+
+        }
+
         public Level(int n, int m)
         {
             m_n = n;
