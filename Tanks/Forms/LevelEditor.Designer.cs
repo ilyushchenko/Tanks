@@ -29,14 +29,16 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.pnlCreate = new System.Windows.Forms.Panel();
+            this.nudLevelNSize = new System.Windows.Forms.NumericUpDown();
+            this.lbxLevelHelpMN = new System.Windows.Forms.Label();
+            this.nudLevelMSize = new System.Windows.Forms.NumericUpDown();
+            this.pnlLoad = new System.Windows.Forms.Panel();
             this.btnSelectPath = new System.Windows.Forms.Button();
             this.lblLevelHelpCreate = new System.Windows.Forms.Label();
             this.tbxLevelLoad = new System.Windows.Forms.TextBox();
-            this.lbxLevelHelpMN = new System.Windows.Forms.Label();
             this.rbnLevelLoad = new System.Windows.Forms.RadioButton();
             this.rbnLevelCreate = new System.Windows.Forms.RadioButton();
-            this.nudLevelNSize = new System.Windows.Forms.NumericUpDown();
-            this.nudLevelMSize = new System.Windows.Forms.NumericUpDown();
             this.btnLevelLoad = new System.Windows.Forms.Button();
             this.gbxSave = new System.Windows.Forms.GroupBox();
             this.btnSavePath = new System.Windows.Forms.Button();
@@ -46,14 +48,12 @@
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.ucField = new Tanks.Field();
-            this.pnlLoad = new System.Windows.Forms.Panel();
-            this.pnlCreate = new System.Windows.Forms.Panel();
             this.panel1.SuspendLayout();
+            this.pnlCreate.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLevelNSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudLevelMSize)).BeginInit();
-            this.gbxSave.SuspendLayout();
             this.pnlLoad.SuspendLayout();
-            this.pnlCreate.SuspendLayout();
+            this.gbxSave.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -67,6 +67,60 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(229, 168);
             this.panel1.TabIndex = 0;
+            // 
+            // pnlCreate
+            // 
+            this.pnlCreate.Controls.Add(this.nudLevelNSize);
+            this.pnlCreate.Controls.Add(this.lbxLevelHelpMN);
+            this.pnlCreate.Controls.Add(this.nudLevelMSize);
+            this.pnlCreate.Location = new System.Drawing.Point(0, 20);
+            this.pnlCreate.Name = "pnlCreate";
+            this.pnlCreate.Size = new System.Drawing.Size(229, 35);
+            this.pnlCreate.TabIndex = 6;
+            // 
+            // nudLevelNSize
+            // 
+            this.nudLevelNSize.Location = new System.Drawing.Point(3, 10);
+            this.nudLevelNSize.Name = "nudLevelNSize";
+            this.nudLevelNSize.Size = new System.Drawing.Size(50, 20);
+            this.nudLevelNSize.TabIndex = 2;
+            this.nudLevelNSize.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            // 
+            // lbxLevelHelpMN
+            // 
+            this.lbxLevelHelpMN.AutoSize = true;
+            this.lbxLevelHelpMN.Location = new System.Drawing.Point(59, 12);
+            this.lbxLevelHelpMN.Name = "lbxLevelHelpMN";
+            this.lbxLevelHelpMN.Size = new System.Drawing.Size(12, 13);
+            this.lbxLevelHelpMN.TabIndex = 4;
+            this.lbxLevelHelpMN.Text = "x";
+            // 
+            // nudLevelMSize
+            // 
+            this.nudLevelMSize.Location = new System.Drawing.Point(77, 10);
+            this.nudLevelMSize.Name = "nudLevelMSize";
+            this.nudLevelMSize.Size = new System.Drawing.Size(50, 20);
+            this.nudLevelMSize.TabIndex = 1;
+            this.nudLevelMSize.Value = new decimal(new int[] {
+            7,
+            0,
+            0,
+            0});
+            // 
+            // pnlLoad
+            // 
+            this.pnlLoad.Controls.Add(this.btnSelectPath);
+            this.pnlLoad.Controls.Add(this.lblLevelHelpCreate);
+            this.pnlLoad.Controls.Add(this.tbxLevelLoad);
+            this.pnlLoad.Enabled = false;
+            this.pnlLoad.Location = new System.Drawing.Point(1, 79);
+            this.pnlLoad.Name = "pnlLoad";
+            this.pnlLoad.Size = new System.Drawing.Size(228, 55);
+            this.pnlLoad.TabIndex = 6;
             // 
             // btnSelectPath
             // 
@@ -94,15 +148,6 @@
             this.tbxLevelLoad.Size = new System.Drawing.Size(154, 20);
             this.tbxLevelLoad.TabIndex = 0;
             // 
-            // lbxLevelHelpMN
-            // 
-            this.lbxLevelHelpMN.AutoSize = true;
-            this.lbxLevelHelpMN.Location = new System.Drawing.Point(59, 12);
-            this.lbxLevelHelpMN.Name = "lbxLevelHelpMN";
-            this.lbxLevelHelpMN.Size = new System.Drawing.Size(12, 13);
-            this.lbxLevelHelpMN.TabIndex = 4;
-            this.lbxLevelHelpMN.Text = "x";
-            // 
             // rbnLevelLoad
             // 
             this.rbnLevelLoad.AutoSize = true;
@@ -127,30 +172,6 @@
             this.rbnLevelCreate.Text = "Создать уровень";
             this.rbnLevelCreate.UseVisualStyleBackColor = true;
             this.rbnLevelCreate.CheckedChanged += new System.EventHandler(this.rbnLevelCreate_CheckedChanged);
-            // 
-            // nudLevelNSize
-            // 
-            this.nudLevelNSize.Location = new System.Drawing.Point(3, 10);
-            this.nudLevelNSize.Name = "nudLevelNSize";
-            this.nudLevelNSize.Size = new System.Drawing.Size(50, 20);
-            this.nudLevelNSize.TabIndex = 2;
-            this.nudLevelNSize.Value = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            // 
-            // nudLevelMSize
-            // 
-            this.nudLevelMSize.Location = new System.Drawing.Point(77, 10);
-            this.nudLevelMSize.Name = "nudLevelMSize";
-            this.nudLevelMSize.Size = new System.Drawing.Size(50, 20);
-            this.nudLevelMSize.TabIndex = 1;
-            this.nudLevelMSize.Value = new decimal(new int[] {
-            7,
-            0,
-            0,
-            0});
             // 
             // btnLevelLoad
             // 
@@ -226,32 +247,11 @@
             this.ucField.Paint += new System.Windows.Forms.PaintEventHandler(this.ucField_Paint);
             this.ucField.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ucField_MouseDown);
             // 
-            // pnlLoad
-            // 
-            this.pnlLoad.Controls.Add(this.btnSelectPath);
-            this.pnlLoad.Controls.Add(this.lblLevelHelpCreate);
-            this.pnlLoad.Controls.Add(this.tbxLevelLoad);
-            this.pnlLoad.Enabled = false;
-            this.pnlLoad.Location = new System.Drawing.Point(1, 79);
-            this.pnlLoad.Name = "pnlLoad";
-            this.pnlLoad.Size = new System.Drawing.Size(228, 55);
-            this.pnlLoad.TabIndex = 6;
-            // 
-            // pnlCreate
-            // 
-            this.pnlCreate.Controls.Add(this.nudLevelNSize);
-            this.pnlCreate.Controls.Add(this.lbxLevelHelpMN);
-            this.pnlCreate.Controls.Add(this.nudLevelMSize);
-            this.pnlCreate.Location = new System.Drawing.Point(0, 20);
-            this.pnlCreate.Name = "pnlCreate";
-            this.pnlCreate.Size = new System.Drawing.Size(229, 35);
-            this.pnlCreate.TabIndex = 6;
-            // 
             // LevelEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(247, 362);
+            this.ClientSize = new System.Drawing.Size(249, 340);
             this.Controls.Add(this.ucField);
             this.Controls.Add(this.gbxSave);
             this.Controls.Add(this.panel1);
@@ -260,14 +260,14 @@
             this.Text = "LevelEditor";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudLevelNSize)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudLevelMSize)).EndInit();
-            this.gbxSave.ResumeLayout(false);
-            this.gbxSave.PerformLayout();
-            this.pnlLoad.ResumeLayout(false);
-            this.pnlLoad.PerformLayout();
             this.pnlCreate.ResumeLayout(false);
             this.pnlCreate.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLevelNSize)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLevelMSize)).EndInit();
+            this.pnlLoad.ResumeLayout(false);
+            this.pnlLoad.PerformLayout();
+            this.gbxSave.ResumeLayout(false);
+            this.gbxSave.PerformLayout();
             this.ResumeLayout(false);
 
         }

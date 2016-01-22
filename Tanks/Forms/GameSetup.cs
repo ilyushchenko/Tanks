@@ -14,9 +14,6 @@ namespace Tanks
     public partial class GameSetup : Form
     {
         GameController m_gameController;
-        List<ComboBox> cbxList = new List<ComboBox>();
-        List<TextBox> tbxList = new List<TextBox>();
-        int count;
 
         public GameSetup(GameController gameController)
         {
@@ -24,44 +21,10 @@ namespace Tanks
             m_gameController = gameController;
         }
 
-        private void button3_Click(object sender, EventArgs e)
-        {
-            
-            count = Convert.ToInt32(nudCountOfTanks.Value);
-            for (int i = 0; i < count; i++)
-            {
-                ComboBox comboBox = new ComboBox();
-                comboBox.Location = new Point(20, 200 + i*30);
-                comboBox.Items.Add("голубой");
-                comboBox.Items.Add("зеленый");
-                comboBox.Items.Add("красный");
-
-                TextBox tbx = new TextBox();
-                tbx.Location = new Point(140, 200 + i * 30);
-                tbx.Text = "1.txt";
-                tbxList.Add(tbx);
-                cbxList.Add(comboBox);
-                Controls.Add(comboBox);
-                Controls.Add(tbx);
-            }
-        }
-
-        private void button2_Click(object sender, EventArgs e)
+        private void btnLoad_Click(object sender, EventArgs e)
         {
             m_gameController.LoadLevel(tbxLevelPath.Text);
-
-            for (int i = 0; i < count; i++)
-            {
-                Tank tank = new Tank();
-                Player player = new Player();
-                Radar radar = new Radar(m_gameController.GetField());
-                player.LoadCommands(tbxList[i].Text);
-                tank.SetColor(cbxList[i].SelectedItem.ToString());
-                tank.SetPlayer(player);
-                tank.SetRadar(radar);
-                m_gameController.PutTank(tank);
-            }
-
+            pnlAdd.Enabled = true;
         }
 
         public GameController GetLevelSetup()
@@ -76,6 +39,33 @@ namespace Tanks
             {
                 tbxLevelPath.Text = openFileDialog.FileName;
             }
+        }
+        
+        private void AddTank(string color, string program)
+        {
+            Tank tank = new Tank();
+            CommandController tankController = new CommandController();
+            Radar radar = new Radar(m_gameController.GetField());
+            tankController.LoadCommands(program);
+            tank.SetColor(color);
+            tank.SetCommandController(tankController);
+            tank.SetRadar(radar);
+            m_gameController.PutTank(tank);
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            DialogResult dialog = openFileDialog.ShowDialog();
+            if(dialog == DialogResult.OK)
+            {
+                AddTank((sender as Button).Text, openFileDialog.FileName);
+                (sender as Button).Enabled = false;
+            }
+        }
+
+        private void btnPlay_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

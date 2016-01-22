@@ -46,6 +46,17 @@ namespace Tanks
             return false;
         }
 
+        public List<IPositionable> GetCollections()
+        {
+            return m_units;
+        }
+
+        public void SetUnit(IPositionable unit)
+        {
+            IPositionable replaceUnit = m_units.Find(p => p.Position == unit.Position);
+            replaceUnit = unit;
+        }
+
         #endregion
 
         #region Draw

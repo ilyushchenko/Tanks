@@ -9,7 +9,6 @@ namespace Tanks
         MoveFail,
         Turned,
         Fire,
-        TankKill,
         FireFail,
         ProjectileMoved,
         CanMove,

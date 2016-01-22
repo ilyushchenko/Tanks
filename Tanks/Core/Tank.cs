@@ -14,6 +14,17 @@ namespace Tanks
             InitializeCommands();
         }
 
+        public Tank(Tank tank)
+        {
+            m_commandComtroller = tank.m_commandComtroller;
+            m_radar = tank.m_radar;
+            m_tankColor = tank.m_tankColor;
+            m_status = Status.Alive;
+            SetImage(m_tankColor);
+            InitializeCommands();
+
+    }
+
         #endregion
 
         #region IPositionable
@@ -54,6 +65,14 @@ namespace Tanks
             set
             {
                 m_direction = value;
+            }
+        }
+
+        public Status TankStatus
+        {
+            get
+            {
+                return m_status;
             }
         }
 
@@ -170,13 +189,9 @@ namespace Tanks
         public CommandResult Fire()
         {
             Radar.RadarResult result = m_radar.CheckCell(m_position, m_direction);
-            if(result == Radar.RadarResult.Free)
+            if(result == Radar.RadarResult.Free || result == Radar.RadarResult.Enemy)
             {
                 return CommandResult.Fire;
-            }
-            else if(result == Radar.RadarResult.Enemy)
-            {
-                return CommandResult.TankKill;
             }
             return CommandResult.FireFail;
         }
@@ -217,8 +232,13 @@ namespace Tanks
 
         public void SetColor(string color)
         {
-            m_tankColor = GetColor(color);
-            switch(m_tankColor)
+            m_tankColor = GetColor(color.ToLower());
+            SetImage(m_tankColor);
+        }
+
+        private void SetImage(Colors color)
+        {
+            switch(color)
             {
                 case Colors.Black:
                     m_tankImage = Images.Black;
@@ -267,13 +287,13 @@ namespace Tanks
             switch(color)
             {
                 case "черный":
-                    return Colors.Red;
+                    return Colors.Black;
                 case "голубой":
                     return Colors.Blue;
                 case "зеленый":
                     return Colors.Green;
                 case "оранжевый":
-                    return Colors.Yellow;
+                    return Colors.Orange;
                 case "розовый":
                     return Colors.Pink;
                 case "малиновый":
@@ -341,7 +361,7 @@ namespace Tanks
             Unknown
         }
 
-        private enum Status
+        public enum Status
         {
             Alive,
             Dead

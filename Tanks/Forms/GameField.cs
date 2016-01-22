@@ -6,6 +6,7 @@ namespace Tanks
     public partial class GameField : Form
     {
         GameController m_gameController;
+        GameSetup gameSetup;
 
         public GameField(GameController gameController)
         {
@@ -15,7 +16,7 @@ namespace Tanks
 
         private void btnGameSetup_Click(object sender, EventArgs e)
         {
-            GameSetup gameSetup = new GameSetup(m_gameController);
+            gameSetup = new GameSetup(m_gameController);
             if (DialogResult.OK == gameSetup.ShowDialog())
             {
                 m_gameController = gameSetup.GetLevelSetup();
@@ -32,12 +33,12 @@ namespace Tanks
 
         private void timer_Tick(object sender, EventArgs e)
         {
-            if(m_gameController.Status == Status.Playing)
+            if(m_gameController.GameStatus == Level.Status.Playing)
             {
                 m_gameController.NextStep();
                 ucField.Invalidate();
             }
-            else if(m_gameController.Status == Status.End)
+            else if(m_gameController.GameStatus == Level.Status.End)
             {
                 timer.Enabled = false;
                 MessageBox.Show("Игра окончена!");
@@ -55,7 +56,14 @@ namespace Tanks
         private void btnStart_Click(object sender, EventArgs e)
         {
             timer.Enabled = true;
-            m_gameController.Status = Status.Playing;
+            m_gameController.GameStatus = Level.Status.Playing;
+        }
+
+        private void btnRestart_Click(object sender, EventArgs e)
+        {
+            timer.Enabled = false;
+            m_gameController.RestartGame();
+            ucField.Invalidate();
         }
     }
 }

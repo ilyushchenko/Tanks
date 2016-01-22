@@ -48,6 +48,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\DestroyedTank.cs" />
+    <Compile Include="Interfaces\IDestroyable.cs" />
+    <Compile Include="Interfaces\IEqual.cs" />
     <Compile Include="Interfaces\IScorable.cs" />
     <Compile Include="Forms\ScoreTable.cs">
       <SubType>Form</SubType>
@@ -109,7 +111,7 @@
     <Compile Include="Core\Tank.cs" />
     <Compile Include="Collections\UnitCollection.cs" />
     <Compile Include="Core\Wall.cs" />
-    <Compile Include="Core\Player.cs" />
+    <Compile Include="Controllers\CommandController.cs" />
     <Compile Include="Field.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -150,7 +152,6 @@
     <EmbeddedResource Include="Field.resx">
       <DependentUpon>Field.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="ClassDiagram2.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

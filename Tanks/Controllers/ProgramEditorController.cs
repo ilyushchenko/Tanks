@@ -23,7 +23,11 @@ namespace Tanks
             using(StreamWriter sw = new StreamWriter(path))
             {
                 sw.WriteLine(m_title);
-                sw.WriteLine(m_program);
+                string[] lines = m_program.Split('\n');
+                foreach(string line in lines)
+                {
+                    sw.WriteLine(line);
+                }
             }
         }
 

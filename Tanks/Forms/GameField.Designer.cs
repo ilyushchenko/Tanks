@@ -33,7 +33,7 @@
             this.timer = new System.Windows.Forms.Timer(this.components);
             this.btnStart = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnRestart = new System.Windows.Forms.Button();
             this.ucField = new Tanks.Field();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -67,7 +67,7 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.LightGray;
-            this.panel1.Controls.Add(this.button1);
+            this.panel1.Controls.Add(this.btnRestart);
             this.panel1.Controls.Add(this.btnGameSetup);
             this.panel1.Controls.Add(this.btnStart);
             this.panel1.Location = new System.Drawing.Point(12, 12);
@@ -75,14 +75,15 @@
             this.panel1.Size = new System.Drawing.Size(129, 373);
             this.panel1.TabIndex = 3;
             // 
-            // button1
+            // btnRestart
             // 
-            this.button1.Location = new System.Drawing.Point(24, 108);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 36);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "Старт игры";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnRestart.Location = new System.Drawing.Point(24, 108);
+            this.btnRestart.Name = "btnRestart";
+            this.btnRestart.Size = new System.Drawing.Size(75, 36);
+            this.btnRestart.TabIndex = 3;
+            this.btnRestart.Text = "Рестарт игры";
+            this.btnRestart.UseVisualStyleBackColor = true;
+            this.btnRestart.Click += new System.EventHandler(this.btnRestart_Click);
             // 
             // ucField
             // 
@@ -115,7 +116,7 @@
         private System.Windows.Forms.Timer timer;
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnRestart;
         private Field ucField;
     }
 }
